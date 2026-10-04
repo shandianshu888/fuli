@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540" role="img" aria-labelledby="title desc">
+  <title id="title">机场服务多维对比示意图</title>
+  <desc id="desc">以价格、稳定性、晚高峰和节假日四个维度展示服务对比方法</desc>
+  <defs>
+    <pattern id="dots" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.2" fill="#c98b43" opacity=".22"/></pattern>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="0" dy="10" stdDeviation="14" flood-color="#52231d" flood-opacity=".13"/></filter>
+  </defs>
+  <rect width="960" height="540" fill="#fbf5eb"/><rect width="960" height="540" fill="url(#dots)"/>
+  <path d="M0 0h960v94H0z" fill="#8f211d"/><path d="M0 94h960v8H0z" fill="#d69a35"/>
+  <text x="70" y="58" fill="#fff9ef" font-family="Microsoft YaHei, sans-serif" font-size="25" font-weight="700">机场服务对比指南</text>
+  <text x="890" y="58" text-anchor="end" fill="#f3cf8d" font-family="Georgia, serif" font-size="15" letter-spacing="2">COMPARE · VERIFY · DECIDE</text>
+  <g filter="url(#shadow)">
+    <rect x="70" y="142" width="820" height="320" fill="#fffdf9" stroke="#dfc9aa"/><rect x="70" y="142" width="820" height="64" fill="#f5e6cf"/>
+    <path d="M70 206h820M70 334h820M268 142v320M470 142v320M672 142v320" stroke="#d9c6aa" stroke-width="2"/>
+    <g text-anchor="middle" fill="#55271f" font-family="Microsoft YaHei, sans-serif" font-size="18" font-weight="700"><text x="169" y="182">价格与流量</text><text x="369" y="182">节点稳定性</text><text x="571" y="182">晚高峰</text><text x="781" y="182">节假日观察</text></g>
+    <g fill="none" stroke="#17704f" stroke-width="11" stroke-linecap="square" stroke-linejoin="miter"><path d="m125 265 24 24 49-57"/><path d="m326 265 24 24 49-57"/><path d="m528 265 24 24 49-57"/><path d="m732 265 24 24 49-57"/></g>
+    <g text-anchor="middle" fill="#6f665d" font-family="Microsoft YaHei, sans-serif" font-size="15"><text x="169" y="382">核对结算价与倍率</text><text x="369" y="382">连续多日重复测试</text><text x="571" y="382">固定 20:00–23:00</text><text x="781" y="382">节前 · 当日 · 节后</text></g>
+    <text x="480" y="430" text-anchor="middle" fill="#9c2f27" font-family="Microsoft YaHei, sans-serif" font-size="17" font-weight="700">同一条件记录，才能形成可复核的选择依据</text>
+  </g>
+</svg>

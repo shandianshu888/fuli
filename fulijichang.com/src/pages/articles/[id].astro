@@ -1,0 +1,6 @@
+---
+import { getCollection, render } from 'astro:content'; import ArticleLayout from '../../layouts/ArticleLayout.astro'; import { newest } from '../../utils/articles';
+export async function getStaticPaths(){const all=newest(await getCollection('articles'));return all.map((article,index)=>({params:{id:article.id},props:{article,prev:all[index+1],next:all[index-1],all}}))}
+const {article,prev,next,all}=Astro.props; const {Content,headings}=await render(article); const related=all.filter((a:any)=>a.id!==article.id&&(a.data.category===article.data.category||a.data.tags.some((t:string)=>article.data.tags.includes(t)))).slice(0,3);
+---
+<ArticleLayout {article} {headings} body={article.body||''} {prev} {next} {related}><Content/></ArticleLayout>

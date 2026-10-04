@@ -1,0 +1,4 @@
+---
+const { sources=[] } = Astro.props;
+---
+{sources.length>0 && <section class="info-box" aria-labelledby="sources-title"><h2 id="sources-title">信息来源与参考资料</h2><ol class="source-list">{sources.map((s:any)=><li><a href={s.url} target="_blank" rel="noopener noreferrer nofollow">{s.title}</a>{s.publisher&&`｜${s.publisher}`}{s.accessed&&`（访问于 ${new Date(s.accessed).toLocaleDateString('zh-CN')}）`}</li>)}</ol></section>}

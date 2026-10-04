@@ -1,0 +1,11 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { CATEGORIES } from '../consts'; import { articlePath, formatDate } from '../utils/articles';
+const { article, eager=false } = Astro.props as { article: CollectionEntry<'articles'>; eager?:boolean };
+---
+<article class="article-card" data-search-item data-title={article.data.title} data-description={article.data.description} data-tags={article.data.tags.join(' ')}>
+  <a href={articlePath(article.id)} tabindex="-1"><img src={article.data.cover.src} width={article.data.cover.width} height={article.data.cover.height} alt={article.data.coverAlt} loading={eager?'eager':'lazy'} decoding="async" /></a>
+  <div class="meta">{CATEGORIES[article.data.category].name} · <time datetime={article.data.updatedDate.toISOString()}>{formatDate(article.data.updatedDate)}更新</time></div>
+  <h3><a href={articlePath(article.id)}>{article.data.title}</a></h3><p>{article.data.description}</p>
+  <div class="tag-list">{article.data.tags.slice(0,3).map(tag=><a class="tag" href={`/tags/${encodeURIComponent(tag)}/`}>#{tag}</a>)}</div>
+</article>

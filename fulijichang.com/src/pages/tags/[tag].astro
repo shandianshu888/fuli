@@ -1,0 +1,6 @@
+---
+import { getCollection } from 'astro:content';import BaseLayout from '../../layouts/BaseLayout.astro';import Breadcrumbs from '../../components/Breadcrumbs.astro';import ArticleCard from '../../components/ArticleCard.astro';import {newest} from '../../utils/articles';
+export async function getStaticPaths(){const all=newest(await getCollection('articles'));const tags=[...new Set(all.flatMap(a=>a.data.tags))];return tags.map(tag=>({params:{tag},props:{tag,items:all.filter(a=>a.data.tags.includes(tag))}}))}
+const {tag,items}=Astro.props;
+---
+<BaseLayout title={`标签：${tag}`} description={`浏览“${tag}”标签下的文章、知识说明与风险提示。`} canonical={`/tags/${encodeURIComponent(tag)}/`}><Breadcrumbs items={[{name:'标签'},{name:tag}]}/><header class="page-head"><div class="container"><div class="eyebrow">内容标签</div><h1>{tag}</h1><p>共 {items.length} 篇相关文章。标签页仅在包含内容时生成。</p></div></header><section class="section"><div class="container article-grid">{items.map((a:any)=><ArticleCard article={a}/>)}</div></section></BaseLayout>

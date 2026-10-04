@@ -1,0 +1,70 @@
+---
+const cases = [
+  ['Tempest / RixCloud','2021','社区清单记录为历史异常'],
+  ['快帆云','2021','社区清单记录为历史异常'],
+  ['FCCloud','2021','社区清单记录为历史异常'],
+  ['SPCloud','2021','社区清单记录为历史异常'],
+  ['EFCloud','2022','社区清单记录为历史异常'],
+  ['PigchaProxy','2022','社区清单记录为历史异常'],
+  ['XLM','2022','社区清单记录为历史异常'],
+  ['Gauss','2022','社区清单记录为历史异常'],
+  ['流量光','2023','社区清单记录为历史异常'],
+  ['Bitduct / 奈飞','2023','社区清单记录为历史异常'],
+  ['亏本机场','2023','社区清单记录为历史异常'],
+  ['V2club / 蓝岸 / Boomcloud','2023','社区资料将其合并记录'],
+  ['NewYun','2023','社区清单记录为历史异常'],
+  ['ipyipy','2023','社区清单记录为历史异常'],
+  ['creamdata','2023','社区清单记录为历史异常'],
+];
+---
+
+<section class="risk-watch" aria-labelledby="risk-watch-title">
+  <section class="risk-overview" aria-labelledby="risk-overview-title">
+    <div class="risk-overview__lead"><span>先看结论</span><h2 id="risk-overview-title">无法访问不一定是跑路，持续失联才需要提高警惕</h2><p>域名故障、节点维护、支付系统异常和短时网络波动，都可能造成暂时无法使用。只有当多个入口长期不可用、官方渠道持续失联、退款无法履行，并伴随异常促销或规则删除时，风险才明显上升。</p></div>
+    <div class="risk-status"><article><b>临时故障</b><p>短时间不可用，但仍有公告、客服响应或明确恢复进度。</p></article><article><b>持续异常</b><p>多个入口连续失效，公告停止更新，客服和退款处理出现异常。</p></article><article><b>历史记录</b><p>公开社区曾记录停服或失联，只作为风险研究样本，不代表法律结论。</p></article></div>
+    <nav class="risk-jump" aria-label="风险栏目快速导航"><a href="#risk-watch-title">历史案例</a><a href="#risk-prevent-title">购买前预防</a><a href="#risk-after-title">失联后处理</a><a href="#risk-minimum-title">最低风险清单</a></nav>
+  </section>
+
+  <header class="risk-watch__hero">
+    <div><span>HISTORICAL WATCH · 历史观察</span><h2 id="risk-watch-title">机场失联与跑路风险档案：15 个历史案例观察</h2><p>以下名称来自公开社区维护的历史清单，用于帮助读者认识服务中断、失联和预付风险。它们不是本站对相关主体作出的法律定性，也不代表同名的新服务或当前主体。</p></div>
+    <aside><strong>阅读原则</strong><p>短时故障不等于“跑路”。应结合持续时间、官方入口、客服响应、退款履约和可核验公告综合判断。</p></aside>
+  </header>
+
+  <div class="risk-cases" role="list" aria-label="历史异常观察样本">
+    {cases.map((item,index)=><article role="listitem"><b>{String(index+1).padStart(2,'0')}</b><div><h3>{item[0]}</h3><p>{item[2]}</p></div><time>{item[1]}</time></article>)}
+  </div>
+
+  <div class="risk-source-note">
+    <strong>资料边界：</strong>案例名称与年份主要依据社区项目中的历史“跑路机场”清单，并参考公开归档文章交叉理解。社区资料可能不完整或存在滞后，本站未验证其经营主体与具体原因，因此仅以“历史异常记录”展示。名称可能被后来者重新使用，请勿据此判断当前同名服务。
+    <div><a href="https://github.com/WilliamStar007/ClashX-V2Ray-TopFreeProxy" target="_blank" rel="nofollow noopener noreferrer">查看社区清单来源 ↗</a><a href="https://limbopro.com/archives/16604.html" target="_blank" rel="nofollow noopener noreferrer">查看公开归档参考 ↗</a></div>
+  </div>
+
+  <section class="risk-actions" aria-labelledby="risk-prevent-title">
+    <header><span>购买之前</span><h2 id="risk-prevent-title">怎么预防机场失联或突然停止服务</h2><p>核心原则是减少预付金额、减少单点依赖，并让订单和账户随时可以迁移。</p></header>
+    <div class="risk-action-grid">
+      <article><b>01</b><h3>第一次只买短周期</h3><p>优先月付、小额或最低档套餐，连续观察晚高峰、节假日、售后和订阅更新后，再决定是否延长周期。</p></article>
+      <article><b>02</b><h3>不要被超低年付催单</h3><p>“永久套餐”“最后一天”“超大流量低价年付”会放大退出成本。折扣越激进，越要核对运营时间和退款规则。</p></article>
+      <article><b>03</b><h3>保留备用方案</h3><p>重要工作不要依赖单一服务。准备可快速切换的合规备用网络方案，并定期确认它仍然可用。</p></article>
+      <article><b>04</b><h3>隔离重要账户</h3><p>不要在不明客户端中输入主邮箱、支付密码或重要账户凭据；不同服务使用不同密码，并开启多因素验证。</p></article>
+      <article><b>05</b><h3>购买前保存规则</h3><p>保存套餐说明、付款金额、服务周期、退款条款、客服入口和订单编号，避免规则改变后没有核对依据。</p></article>
+      <article><b>06</b><h3>观察组合预警</h3><p>官网与面板长期失效、客服持续失联、公告停更、退款困难并同时大促长周期套餐时，应停止追加付款。</p></article>
+    </div>
+  </section>
+
+  <section class="risk-after" aria-labelledby="risk-after-title">
+    <div><span>异常发生后</span><h2 id="risk-after-title">机场失联后，按这个顺序降低损失</h2></div>
+    <ol>
+      <li><strong>立即停止续费和充值</strong><p>关闭自动续费，不再购买所谓恢复包、迁移包或内部补偿套餐。</p></li>
+      <li><strong>保存完整证据</strong><p>截图订单、支付记录、套餐期限、公告、客服沟通和页面错误，并记录准确日期与时间。</p></li>
+      <li><strong>撤销订阅并清理配置</strong><p>从客户端删除失效订阅；如果曾复用密码，立即更换相关账户密码并检查异常登录。</p></li>
+      <li><strong>通过支付渠道咨询争议处理</strong><p>按支付平台规则提交真实订单材料，不伪造原因，也不要向陌生人支付所谓追回费用。</p></li>
+      <li><strong>使用合法渠道反映消费问题</strong><p>能确认经营主体时，可向平台客服或有管辖权的消费者组织咨询，并避免公开个人信息。</p></li>
+      <li><strong>切换备用方案并复盘</strong><p>先恢复必要业务，再评估损失原因；以后缩短付款周期、降低余额并避免单一服务依赖。</p></li>
+    </ol>
+  </section>
+
+  <section class="risk-minimum" aria-labelledby="risk-minimum-title">
+    <div><span>最低风险清单</span><h2 id="risk-minimum-title">把自己的最大损失控制在一个月以内</h2></div>
+    <ul><li>账户余额只保留近期需要的金额</li><li>新服务至少经过一个完整月和一次晚高峰观察</li><li>不为无法核验的“永久”“不限量”承诺预付大额费用</li><li>订单、条款与客服记录保存在本地</li><li>重要账户使用独立密码和多因素验证</li><li>每月至少检查一次备用方案</li></ul>
+  </section>
+</section>

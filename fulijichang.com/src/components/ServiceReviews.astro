@@ -1,0 +1,74 @@
+---
+import { recommendedServices } from '../data/services';
+
+const entryPrice = (service: (typeof recommendedServices)[number]) => {
+  if (!service.plans?.length) return '价格待核验';
+  const plan = [...service.plans].sort((a, b) => a.price - b.price)[0];
+  return `¥${plan.price} · ${plan.quota}`;
+};
+
+const reviewFocus = [
+  { no: '01', title: '线路与节点覆盖', text: '查看常用地区是否有可选节点、套餐是否说明倍率，以及不同档位是否覆盖轻量到多设备场景。' },
+  { no: '02', title: '连接稳定性', text: '以多日、多时段的可用率、断连次数、延迟波动和故障恢复作为判断框架，不用一次测速代表长期表现。' },
+  { no: '03', title: '晚高峰表现', text: '重点观察 20:00–23:00 的连接连续性、丢包和任务完成情况；同一设备、同一网络重复记录。' },
+  { no: '04', title: '节假日承载', text: '分别查看节前、假期当日和节后状态，并结合维护公告、入口可用性和售后响应进行复核。' },
+  { no: '05', title: '价格与套餐', text: '对比入门价、流量、周期、倍率、设备限制和续费价格，优惠码只作为降低试用门槛的辅助信息。' },
+  { no: '06', title: '售后与风险', text: '确认服务条款、工单渠道、备用入口和退款说明；优先小额、月付或短周期验证，降低长期预付风险。' },
+];
+
+const topTitles = ['性价比之王', '套餐灵活王', '综合体验王'];
+---
+
+<section class="review-board" aria-labelledby="review-board-title">
+  <header class="review-board__head">
+    <div>
+      <div class="eyebrow">16 项候选 · 编辑测评框架</div>
+      <h2 id="review-board-title">机场测评榜</h2>
+      <p>测评顺序与机场推荐榜保持一致，帮助读者从线路、稳定性、晚高峰、节假日、套餐和售后六个维度快速筛选。</p>
+    </div>
+    <a class="review-board__recommend-link" href="/recommend/">查看机场推荐与优惠 →</a>
+  </header>
+
+  <div class="review-disclosure">
+    <strong>评级说明：</strong>当前等级属于编辑参考评级，依据推荐顺序、套餐资料完整度、公开信息和适用场景整理，并非覆盖全部地区与运营商的统一实验室测速。前 6 项统一标记为“优秀”，第 7–16 项统一标记为“较好”，避免评级断层或夸大未经验证的性能。
+  </div>
+
+  <section class="review-method" aria-labelledby="review-method-title">
+    <div class="review-method__intro">
+      <span>REVIEW METHOD</span>
+      <h3 id="review-method-title">我们测评什么，根据什么判断</h3>
+      <p>目标是把每项服务的卖点转化为读者能够核对的选择依据。所有推广入口与编辑判断分开标注，价格和优惠以结算页为准。</p>
+    </div>
+    <div class="review-method__grid">
+      {reviewFocus.map(item => <article><b>{item.no}</b><h4>{item.title}</h4><p>{item.text}</p></article>)}
+    </div>
+  </section>
+
+  <div class="review-table-wrap" tabindex="0" aria-label="可横向滚动的机场测评表">
+    <table class="review-table">
+      <thead><tr><th>排名 / 服务</th><th>线路</th><th>稳定性</th><th>晚高峰</th><th>节假日</th><th>公开入门信息</th><th>推荐理由与人群</th><th>入口</th></tr></thead>
+      <tbody>
+        {recommendedServices.map((service, index) => {
+          const isTop = index < 6;
+          const grade = isTop ? '优秀' : '较好';
+          const audience = service.plans?.[0]?.audience || '希望先核对套餐的用户';
+          return <tr id={`review-service-${index + 1}`}>
+            <th scope="row"><span class={`review-rank ${isTop ? 'top' : ''}`}>{index + 1}</span><strong>{service.name}</strong>{topTitles[index] ? <em class="review-title-badge">{topTitles[index]}</em> : <small>{isTop ? '重点推荐' : '补充候选'}</small>}</th>
+            <td><span class={`review-grade ${isTop ? 'excellent' : 'good'}`}>{grade}</span><small>{isTop ? '优先核对常用地区' : '按需求核对线路'}</small></td>
+            <td><span class={`review-grade ${isTop ? 'excellent' : 'good'}`}>{grade}</span><small>建议连续 7 天复测</small></td>
+            <td><span class={`review-grade ${isTop ? 'excellent' : 'good'}`}>{grade}</span><small>20:00–23:00 复测</small></td>
+            <td><span class={`review-grade ${isTop ? 'excellent' : 'good'}`}>{grade}</span><small>节前、当日、节后观察</small></td>
+            <td><strong>{entryPrice(service)}</strong>{service.coupon && <small>优惠码：<code>{service.coupon}</code></small>}</td>
+            <td><p>{service.recommendation}</p><small>适合：{audience}</small></td>
+            <td><a class="review-visit" href={service.url} target="_blank" rel="sponsored nofollow noopener noreferrer">查看套餐 ↗</a></td>
+          </tr>;
+        })}
+      </tbody>
+    </table>
+  </div>
+
+  <footer class="review-board__footer">
+    <div><strong>如何使用这份测评</strong><p>先按预算和流量选出 2–3 项，再用月付或低成本套餐验证常用线路。不要只看单个等级，也不要因折扣跳过服务条款与风险核验。</p></div>
+    <a href="/articles/review-method/">阅读完整测评方法 →</a>
+  </footer>
+</section>

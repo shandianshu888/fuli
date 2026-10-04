@@ -1,0 +1,4 @@
+---
+const { name, path, intro, index } = Astro.props;
+---
+<a class="category-card" href={path}><span>0{index}</span><h3>{name}</h3><p>{intro}</p></a>

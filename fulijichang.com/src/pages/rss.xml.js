@@ -1,0 +1,2 @@
+import rss from '@astrojs/rss'; import { getCollection } from 'astro:content'; import { SITE } from '../consts'; import { articlePath,newest } from '../utils/articles';
+export async function GET(context){const items=newest(await getCollection('articles'));return rss({title:SITE.name,description:SITE.description,site:context.site,items:items.map(a=>({title:a.data.title,description:a.data.description,pubDate:a.data.publishDate,link:articlePath(a.id),categories:a.data.tags,author:a.data.author})),customData:'<language>zh-CN</language>'})}

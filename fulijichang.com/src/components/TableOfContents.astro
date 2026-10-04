@@ -1,0 +1,5 @@
+---
+const { headings } = Astro.props;
+const list = headings.filter((h:any)=>h.depth===2||h.depth===3);
+---
+{list.length>0 && <aside class="toc" aria-label="文章目录"><h2>文章目录</h2><ul>{list.map((h:any)=><li style={`padding-left:${(h.depth-2)*12}px`}><a href={`#${h.slug}`}>{h.text}</a></li>)}</ul></aside>}

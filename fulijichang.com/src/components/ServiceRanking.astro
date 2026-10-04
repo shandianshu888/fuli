@@ -1,0 +1,127 @@
+---
+import StructuredData from './StructuredData.astro';
+import { recommendedServices } from '../data/services';
+import { SITE } from '../consts';
+
+const itemList = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: '机场推荐榜单',
+  numberOfItems: recommendedServices.length,
+  itemListOrder: 'https://schema.org/ItemListOrderAscending',
+  itemListElement: recommendedServices.map((service, index) => ({
+    '@type': 'ListItem',
+    position: index + 1,
+    name: service.name,
+    url: service.url,
+  })),
+  url: `${SITE.url}/recommend/`,
+};
+
+const rankingLabels = ['首推', '周期灵活', '学生友好', '大流量', '按需可选', '多端适用', '轻量优选', '日常可选', '灵活候选', '新手可选', '按需使用', '多端候选', '入门备选', '轻量候选', '长期候选', '日常候选'];
+const recommendationFallback: Record<string, string> = {
+  '青云梯': '作为轻量候选加入比较，适合希望先核对入门方案和公开条款的用户。',
+  '泡芙云': '适合作为日常需求的补充候选，建议先从短周期方案验证实际体验。',
+  'Flybit': '提供另一个方案比较维度，适合重视套餐灵活度并愿意先行核验的用户。',
+  '网际快车': '面向首次建立候选清单的用户，可与前列服务进行价格和条款对照。',
+  '二猫云': '适合按自身流量需求进一步比较，购买前应重点核对周期和退款规则。',
+  '边缘节点': '作为多设备需求的候选入口，建议结合公开套餐和售后渠道判断。',
+  '大哥云': '适合作为入门备选，优先核验当前价格、流量规则和优惠适用条件。',
+  '光速云': '作为轻量使用候选，适合先小额、短周期测试再决定是否续费。',
+  '龙猫云': '适合纳入长期使用方案的横向比较，重点关注续费价格和服务条款。',
+  '星岛梦': '可作为日常使用候选，建议根据实际设备数和流量需求自行筛选。',
+};
+const highlights: Record<string, string[]> = {
+  '闪电鼠': ['60GB 至 500GB 月流量梯度', '月付与年付均可选择', '覆盖新手到高频多设备场景'],
+  '大佬云': ['月付、年付和一次性套餐', '流量档位覆盖范围较完整', '适合重视周期灵活性的用户'],
+  '环球梯': ['学生年付与常规月付方案', '提供一次性流量包', '覆盖个人和多人多设备需求'],
+  '榴莲云': ['140GB 至 750GB 月付档位', '大流量方案选择较多', '适合影音、下载等不同强度需求'],
+  '云界线': ['常规订阅与一次性套餐并存', '月付流量档位清晰', '适合希望控制订阅周期的用户'],
+  '神行加速': ['120GB 至 520GB 月付档位', '另有轻量年付方案', '适合学习办公和多设备场景'],
+};
+const editorialSources = [
+  { label: '机场眼', domain: 'jichangyan.com', url: 'https://jichangyan.com' },
+  { label: '机场精准查', domain: 'jcjingzhuncha.com', url: 'https://jcjingzhuncha.com' },
+  { label: '机场雷达', domain: 'jcleida.com', url: 'https://jcleida.com' },
+];
+
+---
+<section class="ranking" aria-labelledby="ranking-title">
+  <StructuredData data={itemList} />
+  <div class="ranking-head">
+    <div>
+      <div class="eyebrow">精选服务</div>
+      <h2 id="ranking-title">机场推荐榜单</h2>
+    </div>
+    <span class="meta">更新于 2026 年 10 月 3 日</span>
+  </div>
+  <p class="ranking-note"><strong>推广链接说明：</strong>以下链接可能包含推广参数，名单由本站编辑整理，不代表对速度、稳定性、持续运营或售后的保证。购买前请核对价格、服务条款、退款政策与所在地法律法规，建议先短期、小额验证。</p>
+  <div class="ranking-layout">
+    <ol class="ranking-list">
+      {recommendedServices.map((service, index) => (
+        <li class:list={['ranking-item', { featured: service.featured }]} id={`service-${index + 1}`}>
+          <span class="rank" aria-label={`第 ${index + 1} 名`}>{index + 1}</span>
+          <div class="service-info">
+            <h3>{service.name}<span class="rank-label">{rankingLabels[index]}</span></h3>
+            <p>{service.recommendation || '补充候选服务'}</p>
+          </div>
+          <a class="service-link" href={service.url} target="_blank" rel="sponsored nofollow noopener noreferrer" aria-label={`访问 ${service.name} 的公开注册页面`}>访问注册页 <span aria-hidden="true">↗</span></a>
+          {(service.plans || service.researchNote || service.sources) && (
+            <div class="service-detail">
+              <div class="recommendation-box">
+                <strong>推荐理由</strong>
+                <p>{service.recommendation}</p>
+                <ul>{highlights[service.name]?.map(point => <li>{point}</li>)}</ul>
+              </div>
+              {service.researchNote && <p class="research-note"><strong>公开资料摘要：</strong>{service.researchNote}</p>}
+              {service.coupon && <div class="coupon-row">
+                <div><span>{service.couponLabel || '7 折优惠码'}</span><strong>{service.coupon}</strong></div>
+                <button type="button" class="copy-coupon" data-coupon={service.coupon} aria-label={`复制 ${service.name} 优惠码 ${service.coupon}`}>复制优惠码</button>
+                <span class="copy-status" aria-live="polite"></span>
+                {service.couponLabel && <small>{service.couponLabel}</small>}
+              </div>}
+              {service.plans && <div class="plan-table-wrap" tabindex="0" aria-label={`${service.name} 套餐价格表，可横向滚动`}>
+                <table class="plan-table">
+                  <thead><tr><th scope="col">套餐</th><th scope="col">周期 / 流量</th><th scope="col">公开价格</th><th scope="col">优惠参考</th><th scope="col">适合人群</th></tr></thead>
+                  <tbody>{service.plans.map(plan => <tr><th scope="row">{plan.name}</th><td>{plan.period}<small>{plan.quota}</small></td><td>¥{plan.price.toFixed(2)}</td><td class="discount-price">{service.discountRate ? `¥${(plan.price * service.discountRate).toFixed(2)}` : service.coupon ? `¥${(plan.price * 0.7).toFixed(2)}` : '以结算页为准'}</td><td>{plan.audience}</td></tr>)}</tbody>
+                </table>
+              </div>}
+              <nav class="service-sources" aria-label={`${service.name} 关联博客`}><strong>公开资料来源</strong><ul>{editorialSources.map(source => <li><a href={source.url} target="_blank" rel="noopener noreferrer"><span>{source.label}</span><small>{source.domain}</small><b aria-hidden="true">↗</b></a></li>)}</ul></nav>
+            </div>
+          )}
+          {!service.plans && !service.researchNote && <div class="recommendation-box compact"><strong>推荐理由</strong><p>{recommendationFallback[service.name]}</p></div>}
+        </li>
+      ))}
+    </ol>
+    <aside class="ranking-nav" aria-labelledby="ranking-nav-title">
+      <div class="ranking-nav-head"><span class="eyebrow">快速导航</span><h3 id="ranking-nav-title">推荐列表</h3></div>
+      <ol>
+        {recommendedServices.map((service, index) => (
+          <li class:list={{ active: index === 0 }}>
+            <a href={`#service-${index + 1}`} aria-current={index === 0 ? 'true' : undefined}>
+              <span><b>{index + 1}.</b> {service.name}</span>
+              <em>{rankingLabels[index]}</em>
+            </a>
+            {service.coupon && <div class="nav-coupon-row"><span>优惠码</span><button type="button" class="nav-coupon copy-coupon" data-coupon={service.coupon} aria-label={`复制 ${service.name} 优惠码 ${service.coupon}`}>{service.coupon}<small>复制</small></button><span class="copy-status sr-only" aria-live="polite"></span></div>}
+          </li>
+        ))}
+      </ol>
+      <p>当前默认选中：闪电鼠</p>
+    </aside>
+  </div>
+</section>
+<script is:inline>
+  document.querySelectorAll('.copy-coupon').forEach((button) => {
+    button.addEventListener('click', async () => {
+      const code = button.dataset.coupon || '';
+      const status = button.closest('.coupon-row, li')?.querySelector('.copy-status');
+      const original = button.innerHTML;
+      try {
+        if (!navigator.clipboard) throw new Error('Clipboard API unavailable');
+        await navigator.clipboard.writeText(code);
+        button.textContent = '已复制'; if (status) status.textContent = `优惠码 ${code} 已复制`;
+        window.setTimeout(() => { button.innerHTML = original; if (status) status.textContent = ''; }, 1800);
+      } catch { if (status) status.textContent = `复制失败，请手动复制 ${code}`; }
+    });
+  });
+</script>

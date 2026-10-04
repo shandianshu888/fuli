@@ -1,0 +1,13 @@
+---
+import { getCollection } from 'astro:content'; import CategoryLayout from '../../layouts/CategoryLayout.astro'; import ServiceRanking from '../../components/ServiceRanking.astro'; import ServiceComparison from '../../components/ServiceComparison.astro'; import ServiceReviews from '../../components/ServiceReviews.astro'; import KnowledgeLibrary from '../../components/KnowledgeLibrary.astro'; import DealsHub from '../../components/DealsHub.astro'; import RiskWatch from '../../components/RiskWatch.astro'; import { CATEGORIES, type CategoryKey } from '../../consts'; import { newest } from '../../utils/articles';
+export async function getStaticPaths(){const all=newest(await getCollection('articles'));return Object.entries(CATEGORIES).flatMap(([key,value])=>{const items=all.filter(a=>a.data.category===key);const pages=Math.max(1,Math.ceil(items.length/6));return Array.from({length:pages},(_,i)=>({params:{category:key,page:i===0?undefined:`page/${i+1}`},props:{key,value,items,current:i+1}}))})}
+const {key,value,items,current}=Astro.props as {key:CategoryKey;value:(typeof CATEGORIES)[CategoryKey];items:any[];current:number};
+---
+<CategoryLayout name={value.name} intro={value.intro} path={value.path} articles={items} {current}>
+  {key === 'recommend' && current === 1 && <ServiceRanking />}
+  {key === 'compare' && current === 1 && <ServiceComparison />}
+  {key === 'reviews' && current === 1 && <ServiceReviews />}
+  {key === 'knowledge' && current === 1 && <KnowledgeLibrary />}
+  {key === 'deals' && current === 1 && <DealsHub />}
+  {key === 'risk' && current === 1 && <RiskWatch />}
+</CategoryLayout>

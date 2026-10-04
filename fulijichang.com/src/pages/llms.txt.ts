@@ -1,0 +1,2 @@
+import type { APIRoute } from 'astro';
+export const GET:APIRoute=({site})=>new Response(`# 福利机场观察\n\n> 中文网络服务公开信息、知识科普、方案比较与风险观察。\n\n## 核心栏目\n- [机场推荐](${new URL('/recommend/',site)})\n- [机场对比](${new URL('/compare/',site)})\n- [机场测评](${new URL('/reviews/',site)})\n- [知识库](${new URL('/knowledge/',site)})\n- [福利中心](${new URL('/deals/',site)})\n- [服务风险与失联案例观察](${new URL('/risk/',site)})\n\n内容区分公开事实、用户反馈和编辑观点；具体依据及更新时间见各文章。\n`,{headers:{'Content-Type':'text/plain; charset=utf-8'}});

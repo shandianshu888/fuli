@@ -1,0 +1,26 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import FAQ from '../../components/FAQ.astro';
+import { SITE } from '../../consts';
+import { knowledgeGuides, type KnowledgeGuide } from '../../data/knowledgeGuides';
+export function getStaticPaths(){return knowledgeGuides.map(guide=>({params:{slug:guide.slug},props:{guide}}));}
+const {guide}=Astro.props as {guide:KnowledgeGuide};
+const current=knowledgeGuides.findIndex(item=>item.slug===guide.slug);const related=[1,2,3].map(offset=>knowledgeGuides[(current+offset)%knowledgeGuides.length]);
+const canonical=`/knowledge/${guide.slug}/`;const updated='2026-10-03';
+const schemas=[{'@context':'https://schema.org','@type':'Article',headline:guide.title,description:guide.description,datePublished:updated,dateModified:updated,author:{'@type':'Person',name:'周言'},editor:{'@type':'Person',name:'林舟'},mainEntityOfPage:new URL(canonical,SITE.url).toString(),publisher:{'@type':'Organization',name:SITE.name,url:SITE.url}},{'@context':'https://schema.org','@type':'BreadcrumbList',itemListElement:[{'@type':'ListItem',position:1,name:'首页',item:SITE.url},{'@type':'ListItem',position:2,name:'知识库',item:new URL('/knowledge/',SITE.url).toString()},{'@type':'ListItem',position:3,name:guide.title,item:new URL(canonical,SITE.url).toString()}]},{'@context':'https://schema.org','@type':'FAQPage',mainEntity:guide.faq.map(item=>({'@type':'Question',name:item.question,acceptedAnswer:{'@type':'Answer',text:item.answer}}))}];
+---
+<BaseLayout title={guide.title} description={guide.description} canonical={canonical} type="article" schema={schemas}>
+  <Breadcrumbs items={[{name:'知识库',href:'/knowledge/'},{name:guide.title}]}/>
+  <article><header class="page-head knowledge-detail-head"><div class="container"><div class="eyebrow">{guide.group}</div><h1>{guide.title}</h1><p class="article-intro">{guide.description}</p><div class="meta">作者：周言 · 审核：林舟 · 更新于 <time datetime={updated}>2026年10月3日</time> · 约 5 分钟阅读</div></div></header>
+  <div class="container section knowledge-detail-layout"><div class="prose">
+    <div class="knowledge-answer"><span>先说结论</span><p>{guide.conclusion}</p></div>
+    <h2>操作与判断步骤</h2><ol>{guide.steps.map(step=><li>{step}</li>)}</ol>
+    <h2>遇到问题时检查什么</h2><p>建议一次只调整一个变量，并记录调整前后的结果。这样才能区分本地网络、客户端配置、订阅状态和服务端节点问题。</p><ul>{guide.checks.map(check=><li>{check}</li>)}</ul>
+    <h2>为什么要这样处理</h2><p>网络体验会同时受到所在地运营商、设备、无线环境、客户端版本、节点线路、目标网站和测试时段影响。单次成功或失败都不足以形成长期结论。更可靠的方法是固定条件、重复验证，并把事实、用户反馈和编辑判断分开记录。</p>
+    <div class="knowledge-compliance"><strong>合规与安全提示</strong><p>仅使用本人合法取得的账户和订阅，遵守所在地法律法规、单位网络政策以及相关平台服务条款。不要公开分享订阅链接、访问令牌或账户凭据，也不要安装来源不明的软件。</p></div>
+    <FAQ items={guide.faq}/>
+    <section class="knowledge-next"><div><span>继续阅读</span><h2>从知识理解到实际选择</h2><p>如果你正在比较不同套餐，可前往机场推荐页查看公开价格、优惠信息、适用人群和风险提示。</p></div><a href="/recommend/">查看机场推荐 →</a></section>
+    <section class="knowledge-related"><h2>相关知识</h2><div>{related.map(item=><a href={`/knowledge/${item.slug}/`}><strong>{item.title}</strong><span>{item.description}</span></a>)}</div></section>
+  </div></div></article>
+</BaseLayout>

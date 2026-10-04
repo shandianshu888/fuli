@@ -1,0 +1,89 @@
+---
+import { recommendedServices } from '../data/services';
+
+const packageType = (service: (typeof recommendedServices)[number]) => {
+  if (!service.plans?.length) return '套餐待核验';
+  const periods = [...new Set(service.plans.map((plan) => plan.period))];
+  return periods.join(' / ');
+};
+
+const lowestPrice = (service: (typeof recommendedServices)[number]) => {
+  if (!service.plans?.length) return '待核验';
+  const plan = [...service.plans].sort((a, b) => a.price - b.price)[0];
+  return `¥${plan.price.toFixed(plan.price % 1 ? 2 : 0)} · ${plan.quota}`;
+};
+
+const evidenceLabel = (service: (typeof recommendedServices)[number], index: number) => {
+  if (!service.plans?.length) return '价格待核验';
+  return index < 6 ? '套餐截图已记录' : '公开摘要已整理';
+};
+
+const referenceGrade = (index: number) => index < 6
+  ? { label: '优秀', level: 'excellent' }
+  : { label: '较好', level: 'fair' };
+
+const topTitles = ['性价比之王', '套餐灵活王', '综合体验王'];
+---
+
+<section class="comparison-board" aria-labelledby="comparison-title">
+  <div class="comparison-heading">
+    <div>
+      <div class="eyebrow">同序横向比较</div>
+      <h2 id="comparison-title">推荐榜 16 项对比</h2>
+      <p>名单顺序与“机场推荐”保持一致。价格与套餐用于初步筛选；节点稳定性、晚高峰和节假日表现需要在相同网络条件下持续测试。</p>
+    </div>
+    <a class="comparison-article-link" href="/articles/comparison-framework/">阅读完整对比文章 →</a>
+  </div>
+
+  <div class="comparison-summary" aria-label="对比说明">
+    <div><strong>16</strong><span>同序候选服务</span></div>
+    <div><strong>价格</strong><span>区分截图与公开摘要</span></div>
+    <div><strong>高峰期</strong><span>建议 20:00–23:00 复测</span></div>
+    <div><strong>节假日</strong><span>至少连续观察 3–5 天</span></div>
+  </div>
+
+  <p class="comparison-caution"><strong>等级说明：</strong>前 6 名统一显示“优秀”，第 7–16 名显示“较好”，颜色分层用于快速识别推荐梯度；它不是覆盖全部地区的统一测速结论，实际表现仍应在用户自己的网络环境中复测。</p>
+
+  <div class="comparison-table-wrap" tabindex="0" aria-label="机场推荐顺序对比表，可横向滚动">
+    <table class="comparison-table">
+      <thead>
+        <tr>
+          <th scope="col">顺序</th>
+          <th scope="col">服务</th>
+          <th scope="col">公开入门价 / 流量</th>
+          <th scope="col">套餐结构</th>
+          <th scope="col">优惠信息</th>
+          <th scope="col">价格证据</th>
+          <th scope="col">节点稳定性</th>
+          <th scope="col">晚高峰</th>
+          <th scope="col">节假日</th>
+        </tr>
+      </thead>
+      <tbody>
+        {recommendedServices.map((service, index) => {
+          const grade = referenceGrade(index);
+          return (
+          <tr>
+            <td><span class="comparison-rank">{index + 1}</span></td>
+            <th scope="row"><a href={`/recommend/#service-${index + 1}`}>{service.name}</a>{topTitles[index] && <em class="comparison-title-badge">{topTitles[index]}</em>}<small>{service.recommendation || '补充候选服务'}</small></th>
+            <td>{lowestPrice(service)}</td>
+            <td>{packageType(service)}</td>
+            <td>{service.coupon ? <><code>{service.coupon}</code><small>{service.couponLabel || '优惠范围以结算页为准'}</small></> : '未确认通用码'}</td>
+            <td><span class:list={['evidence-badge', { strong: index < 6 }]}>{evidenceLabel(service, index)}</span></td>
+            <td><span class={`grade-badge ${grade.level}`}>{grade.label}</span><small>需多日、多时段验证</small></td>
+            <td><span class={`grade-badge ${grade.level}`}>{grade.label}</span><small>20:00–23:00 复测</small></td>
+            <td><span class={`grade-badge ${grade.level}`}>{grade.label}</span><small>节前至节后复测</small></td>
+          </tr>
+          );
+        })}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="comparison-methods">
+    <article><span>01</span><h3>日常节点稳定</h3><p>在同一宽带、同一设备和相同节点地区下，连续 7 天记录可用率、延迟、丢包与断连次数。</p></article>
+    <article><span>02</span><h3>晚高峰表现</h3><p>重点观察每日 20:00–23:00，同一测试任务至少重复 3 次，避免单次结果放大偶然波动。</p></article>
+    <article><span>03</span><h3>节假日承载</h3><p>分别记录节前、假期当日和节后表现，同时关注公告、工单响应和临时限速说明。</p></article>
+    <article><span>04</span><h3>售后与恢复</h3><p>稳定性不仅是速度，还包括故障说明是否及时、备用入口是否可用以及恢复时间是否透明。</p></article>
+  </div>
+</section>

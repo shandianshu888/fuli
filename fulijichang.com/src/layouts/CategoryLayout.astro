@@ -1,0 +1,11 @@
+---
+import type { CollectionEntry } from 'astro:content'; import BaseLayout from './BaseLayout.astro'; import Breadcrumbs from '../components/Breadcrumbs.astro'; import ArticleCard from '../components/ArticleCard.astro'; import Pagination from '../components/Pagination.astro'; import { SITE } from '../consts';
+const { name, intro, path, articles, current=1, pageSize=6 }=Astro.props as {name:string;intro:string;path:string;articles:CollectionEntry<'articles'>[];current?:number;pageSize?:number};
+const total=Math.ceil(articles.length/pageSize); const shown=articles.slice((current-1)*pageSize,current*pageSize);
+const canonical=current===1?path:`${path}page/${current}/`;
+const schema=[{'@context':'https://schema.org','@type':'CollectionPage',name,description:intro,url:new URL(canonical,SITE.url).toString()},{'@context':'https://schema.org','@type':'ItemList',itemListElement:shown.map((a,i)=>({'@type':'ListItem',position:(current-1)*pageSize+i+1,url:new URL(`/articles/${a.id}/`,SITE.url).toString(),name:a.data.title}))}];
+---
+<BaseLayout title={current===1?name:`${name} - 第 ${current} 页`} description={intro} canonical={canonical} schema={schema}>
+  <Breadcrumbs items={[{name}]}/><header class="page-head"><div class="container"><div class="eyebrow">专题栏目</div><h1>{name}</h1><p>{intro}</p></div></header>
+  <section class="section"><div class="container"><slot />{shown.length?<><div class="section-head category-articles-head"><h2>推荐阅读</h2></div><div class="article-grid">{shown.map(a=><ArticleCard article={a}/>)}</div></>:<div class="empty">该栏目正在准备第一篇内容。</div>}<Pagination current={current} total={total} base={path}/></div></section>
+</BaseLayout>

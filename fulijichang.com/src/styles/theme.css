@@ -1,0 +1,65 @@
+:root{--ink:#27231e;--muted:#71685d;--paper:#fbf7ef;--surface:#fffdf9;--line:#e7dccb;--brand:#9b3e24;--brand-dark:#772d1c;--accent:#e58a25;--risk:#a83a2c;--coupon:#fff4dc;--green:#315f4d}
+html{background:var(--paper)}body{background-color:var(--paper);background-image:radial-gradient(circle at 12px 12px,rgba(155,62,36,.045) 1px,transparent 1.5px);background-size:28px 28px}
+body::before{content:"";display:block;height:5px;background:linear-gradient(90deg,var(--brand) 0 28%,var(--accent) 28% 45%,#f0c875 45% 58%,var(--green) 58%)}
+.site-header{top:0;background:rgba(255,253,249,.96);border-color:var(--line);box-shadow:0 5px 18px rgba(67,48,30,.05)}
+.brand{position:relative;padding-left:38px}.brand::before{content:"惠";position:absolute;left:0;top:1px;width:30px;height:30px;display:grid;place-items:center;border-radius:50%;background:var(--accent);color:#fff;font:700 15px/1 "Songti SC",serif;box-shadow:inset 0 0 0 3px rgba(255,255,255,.45)}
+.nav a{position:relative}.nav a[aria-current="page"]::after{content:"";position:absolute;left:0;right:0;bottom:-8px;height:2px;background:var(--accent)}
+.hero{position:relative;isolation:isolate;overflow:hidden;padding:76px 0 68px;background:linear-gradient(110deg,#fff8e9 0 56%,#f5e5ca 56%);border-color:var(--line)}
+.hero::before{content:"福利";position:absolute;right:5%;top:-34px;z-index:-1;color:rgba(155,62,36,.055);font:900 clamp(150px,22vw,310px)/1 Georgia,"Songti SC",serif;letter-spacing:-.1em}
+.hero::after{content:"%";position:absolute;right:8%;bottom:-95px;z-index:-1;color:rgba(229,138,37,.12);font:900 260px/1 Georgia,serif;transform:rotate(-8deg)}
+.hero-grid{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(280px,.65fr);gap:70px;align-items:center}.hero-copy{min-width:0}.hero h1{max-width:720px;color:#292018}.hero p{color:#5f554a}.hero .eyebrow,.page-head .eyebrow{display:inline-flex;align-items:center;gap:8px}.hero .eyebrow::before,.page-head .eyebrow::before{content:"";width:22px;height:2px;background:var(--accent)}
+.benefit-ticket{position:relative;background:var(--surface);border:1px solid #d7c5aa;border-top:5px solid var(--brand);padding:24px;box-shadow:12px 12px 0 #ead9bd}.benefit-ticket::before,.benefit-ticket::after{content:"";position:absolute;left:-11px;width:20px;height:20px;border-radius:50%;background:#f5e5ca;border-right:1px solid #d7c5aa}.benefit-ticket::before{top:38%}.benefit-ticket::after{bottom:18%}.benefit-ticket .ticket-label{font-size:12px;color:var(--brand);font-weight:700;letter-spacing:.12em}.benefit-ticket strong{display:block;font:700 28px/1.3 Georgia,"Songti SC",serif;margin:10px 0}.benefit-ticket ul{list-style:none;padding:15px 0 0;margin:18px 0 0;border-top:1px dashed #d7c5aa}.benefit-ticket li{display:flex;justify-content:space-between;gap:15px;padding:6px 0;font-size:13px}.benefit-ticket li span:last-child{color:var(--brand);font-weight:700}.button{background:var(--brand);border:1px solid var(--brand);box-shadow:4px 4px 0 #e3b46e}.button:hover{background:var(--brand-dark);color:#fff}.tag{background:rgba(255,255,255,.55)}
+.section.alt{background:rgba(255,253,249,.88);border-color:var(--line)}.section-head{padding-bottom:13px;border-bottom:1px solid var(--line)}.section-head h2::before{content:"";display:inline-block;width:7px;height:24px;margin-right:10px;background:var(--accent);vertical-align:-3px}
+.category-grid{gap:14px;background:transparent;border:0}.category-card{position:relative;border:1px solid var(--line);box-shadow:0 6px 20px rgba(65,45,25,.04);overflow:hidden}.category-card::after{content:"";position:absolute;right:-18px;bottom:-18px;width:66px;height:66px;border:1px dashed #e6b669;border-radius:50%}.category-card:hover{background:#fff7e7;transform:translateY(-2px)}.category-card span{color:var(--brand);font-family:Georgia,serif;font-size:18px}.article-card{border-color:var(--brand);background:rgba(255,253,249,.66);padding:14px}.article-card img{border-bottom:4px solid var(--accent)}
+.page-head{position:relative;overflow:hidden;background:linear-gradient(110deg,#fff8e9,#f7ead5);padding:62px 0 42px}.page-head::after{content:"%";position:absolute;right:8%;top:-75px;color:rgba(155,62,36,.07);font:900 190px/1 Georgia,serif}.page-head h1{color:#30231b}.breadcrumbs{padding-bottom:8px}
+.ranking-note,.info-box{background:#fffdf9}.ranking-note{border-left-color:var(--accent)}.ranking-item.featured{background:#fff8e9}.featured .rank{color:var(--brand)}.service-detail{border-color:#e7d6bd;box-shadow:0 5px 16px rgba(78,52,24,.035)}.copy-coupon{background:var(--brand);border-color:var(--brand)}.plan-table thead th{background:#f8ead3}.discount-price{color:var(--brand)}.ranking-nav{border-top-color:var(--brand);box-shadow:0 8px 24px rgba(66,43,20,.08)}.ranking-nav li.active{background:var(--brand)}.recommendation-box{border-left-color:var(--accent);background:#fff8eb}.rank-label{border-color:var(--accent);color:var(--brand)}
+.site-footer{position:relative;background:#2d251f;color:#eadfd0}.site-footer::before{content:"";position:absolute;left:0;right:0;top:0;border-top:4px dashed #d99b4e}.site-footer a{color:#f2e4ce}.legal{border-color:#66574b}
+@media(max-width:850px){.hero-grid{grid-template-columns:1fr;gap:34px}.benefit-ticket{max-width:520px}.hero{background:linear-gradient(145deg,#fff8e9,#f5e5ca)}.category-grid{gap:10px}}
+@media(max-width:560px){body::before{height:4px}.brand{padding-left:34px}.brand::before{width:27px;height:27px}.hero{padding:48px 0}.hero::after{font-size:170px}.benefit-ticket{margin-right:10px;padding:20px}.category-grid{gap:10px}.article-card{padding:10px}.page-head{padding:46px 0 32px}}
+@media(prefers-reduced-motion:no-preference){.category-card,.button,.article-card{transition:transform .18s ease,background-color .18s ease,box-shadow .18s ease}.article-card:hover{transform:translateY(-2px);box-shadow:0 9px 24px rgba(65,45,25,.07)}}
+
+/* 喜庆福利主题：红色负责氛围，米白继续承担长文阅读。 */
+:root{--brand:#b22924;--brand-dark:#861b19;--accent:#e5a43a;--paper:#fcf8f2;--surface:#fffdfa;--line:#ead9ca;--coupon:#fff2d8;--festive-red:#a91f1c;--festive-deep:#721513;--festive-gold:#f1c26a}
+html{background:var(--paper)}
+body{background-color:var(--paper);background-image:radial-gradient(circle at 12px 12px,rgba(169,31,28,.04) 1px,transparent 1.5px);background-size:28px 28px}
+body::before{background:linear-gradient(90deg,var(--festive-deep) 0 31%,var(--brand) 31% 55%,var(--accent) 55% 72%,var(--festive-gold) 72% 86%,var(--green) 86%)}
+.brand::before{background:var(--brand);box-shadow:inset 0 0 0 2px #f5c66d,0 2px 7px rgba(114,21,19,.18)}
+.nav a[aria-current="page"]::after{background:var(--brand)}
+.hero{background:linear-gradient(125deg,#741512 0%,#a9201c 52%,#c43a2d 100%);border-color:#6e1513;color:#fff}
+.hero::before{color:rgba(255,223,160,.1)}
+.hero::after{color:rgba(255,219,146,.15)}
+.hero-grid::before,.hero-grid::after{content:"";position:absolute;z-index:-1;border:1px solid rgba(255,218,145,.18);border-radius:50%;pointer-events:none}
+.hero-grid::before{width:360px;height:360px;left:-220px;bottom:-245px;box-shadow:72px -72px 0 -1px rgba(255,218,145,.05),144px -144px 0 -1px rgba(255,218,145,.04)}
+.hero-grid::after{width:180px;height:180px;right:29%;top:-115px;box-shadow:55px 55px 0 -1px rgba(255,218,145,.06)}
+.hero h1{color:#fff8e8;text-shadow:0 2px 0 rgba(77,10,8,.18)}
+.hero p{color:#f8e7da}
+.hero .eyebrow{color:#ffd98e}
+.benefit-ticket{background:#fff9ec;color:var(--ink);border-color:#e8c681;border-top-color:var(--festive-gold);box-shadow:12px 12px 0 rgba(91,12,10,.25)}
+.benefit-ticket::before,.benefit-ticket::after{background:#a5221e;border-right-color:#e8c681}
+.benefit-ticket ul{border-top-color:#d7b86e}
+.hero .button{background:#f4bd55;color:#53100e;border-color:#f4bd55;box-shadow:4px 4px 0 rgba(77,10,8,.32)}
+.hero .button:hover{background:#ffd981;color:#53100e}
+.hero .tag{color:#fff8ed;border-color:rgba(255,231,186,.55);background:rgba(255,255,255,.08)}
+.hero .tag:hover{background:rgba(255,255,255,.16)}
+.page-head{background:linear-gradient(120deg,#8a1916,#b72b24 68%,#c84130);color:#fff}
+.page-head::after{color:rgba(255,221,156,.13)}
+.page-head h1{color:#fff7e8}
+.page-head .eyebrow{color:#ffda91}
+.page-head p,.page-head .meta{color:#f5ded3}
+.page-head a{color:#ffe0a3}
+.section-head h2::before{background:var(--brand)}
+.category-card:hover{background:#fff4e6}
+.article-card{border-color:#c74a39}
+.article-card img{border-bottom-color:#d89a35}
+.site-footer::before{border-top-color:#c94b35}
+@media(max-width:850px){.hero{background:linear-gradient(145deg,#7c1614,#b62a23)}}
+
+/* 优惠码按钮：红色背景上的高对比文字。 */
+.ranking-nav .nav-coupon,.ranking-nav li.active .nav-coupon{background:#9d201c;border-color:#9d201c;color:#fff;font-family:ui-monospace,"SFMono-Regular",Consolas,"Liberation Mono",monospace;font-weight:800;letter-spacing:.02em;box-shadow:none}
+.ranking-nav .nav-coupon small,.ranking-nav li.active .nav-coupon small{color:#ffe3a5;font-family:system-ui,"Microsoft YaHei",sans-serif;font-weight:700}
+.ranking-nav .nav-coupon:hover{background:#741512;border-color:#741512;color:#fff}
+.ranking-nav .nav-coupon:focus-visible{outline:3px solid #f3bd55;outline-offset:2px}
+
+/* 让动态福字在内容区可见，同时保留卡片阅读对比度。 */
+.section.alt{background:rgba(255,253,249,.42)}
+.article-card{background:rgba(255,253,249,.48);box-shadow:0 5px 18px rgba(73,38,24,.035)}

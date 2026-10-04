@@ -1,0 +1,88 @@
+---
+import { recommendedServices } from '../data/services';
+
+const couponServices = recommendedServices.filter(service => service.coupon);
+const featuredCoupons = couponServices.filter(service => service.featured);
+const moreCoupons = couponServices.filter(service => !service.featured);
+const rateFor = (service: (typeof recommendedServices)[number]) => service.discountRate ?? (service.featured ? 0.7 : undefined);
+const rateLabel = (service: (typeof recommendedServices)[number]) => {
+  const rate = rateFor(service);
+  return rate ? `${Math.round(rate * 10)} 折` : '优惠码';
+};
+const money = (value:number) => Number.isInteger(value) ? value.toFixed(0) : value.toFixed(2);
+---
+
+<section class="deals-hub" aria-labelledby="deals-hub-title">
+  <header class="deals-hub__head">
+    <div><div class="eyebrow">COUPON GUIDE · 优惠聚合</div><h2 id="deals-hub-title">机场 VPN 优惠码与套餐折后参考</h2><p>集中整理机场推荐榜中已有的优惠码、适用场景与套餐价格。复制优惠码后，请在服务商结算页确认折扣是否生效。</p></div>
+    <div class="deals-hub__stats"><strong>{couponServices.length}</strong><span>个已记录优惠码</span><strong>{featuredCoupons.length}</strong><span>项重点 7 折福利</span></div>
+  </header>
+
+  <aside class="deal-alert"><strong>使用前请核验：</strong>优惠码、活动时间、适用周期和最低消费可能变化。折后价按公开原价 × 折扣比例计算，仅作比较参考；是否支持年付小包、一次性流量包或续费，以结算页实际显示为准。</aside>
+
+  <div class="featured-deals">
+    {featuredCoupons.map((service,index) => {
+      const rate = rateFor(service) ?? 1;
+      const samplePlans = service.plans?.slice(0,4) ?? [];
+      return <article class="deal-card" id={`deal-${index+1}`}>
+        <header><div><span class="deal-rank">推荐 {index+1}</span><h3>{service.name}</h3><p>{service.recommendation}</p></div><b>{rateLabel(service)}</b></header>
+        <div class="deal-code-row"><span>优惠码</span><code>{service.coupon}</code><button type="button" class="deal-copy" data-coupon={service.coupon} aria-label={`复制${service.name}优惠码${service.coupon}`}>复制优惠码</button><span class="deal-copy-status" aria-live="polite"></span></div>
+        <div class="deal-plan-wrap"><table><thead><tr><th>套餐</th><th>原价</th><th>{rateLabel(service)}后</th><th>流量 / 周期</th><th>适合人群</th></tr></thead><tbody>{samplePlans.map(plan=><tr><th scope="row">{plan.name}</th><td>¥{money(plan.price)}</td><td><strong>¥{money(plan.price*rate)}</strong></td><td>{plan.quota}<small>{plan.period}</small></td><td>{plan.audience}</td></tr>)}</tbody></table></div>
+        <footer><span>下单前请确认结算价</span><a href={service.url} target="_blank" rel="sponsored nofollow noopener noreferrer">访问注册页 ↗</a></footer>
+      </article>;
+    })}
+  </div>
+
+  {moreCoupons.length > 0 && <section class="more-deals" aria-labelledby="more-deals-title"><div class="section-head"><div><div class="eyebrow">补充优惠</div><h2 id="more-deals-title">推荐榜中的其他优惠码</h2></div><p>以下优惠来自公开资料整理，时效和适用范围需重点复核。</p></div><div class="more-deals-grid">{moreCoupons.map(service=>{
+    const rate=rateFor(service); const firstPlan=service.plans?.[0];
+    return <article><div class="more-deals-title"><h3>{service.name}</h3><span>{rateLabel(service)}</span></div><p>{service.couponLabel || '公开优惠信息，结算页核验'}</p><div class="deal-code-row compact"><code>{service.coupon}</code><button type="button" class="deal-copy" data-coupon={service.coupon}>复制</button><span class="deal-copy-status" aria-live="polite"></span></div>{firstPlan&&<p class="deal-price-line">公开入门：¥{money(firstPlan.price)} / {firstPlan.quota}{rate&&<>，折后约 <strong>¥{money(firstPlan.price*rate)}</strong></>}</p>}<a href={service.url} target="_blank" rel="sponsored nofollow noopener noreferrer">核对套餐与优惠 ↗</a></article>;
+  })}</div></section>}
+
+  <section class="deal-trends" aria-labelledby="deal-trends-title">
+    <header><div class="eyebrow">热门搜索 · 选择入口</div><h2 id="deal-trends-title">机场优惠怎么选？热门福利需求一次看懂</h2><p>用户通常会把优惠码、套餐价格、流量、节点体验和注册地址放在一起比较。下面按真实决策顺序整理六类热门需求。</p></header>
+    <div class="deal-trend-grid">
+      <article><span>HOT 01</span><h3>机场优惠码与 7 折机场</h3><p>先确认优惠码是否适用于所选套餐。前六项 7 折码可降低常规套餐的验证成本，但特价年付包或一次性流量包可能不参加。</p><a href="#deals-hub-title">查看当前优惠码 ↑</a></article>
+      <article><span>HOT 02</span><h3>便宜机场和低价 VPN 套餐</h3><p>月均价格低不代表总成本低，还要比较节点倍率、流量、设备限制、续费和退款。新用户优先月付或小额方案。</p><a href="/knowledge/cheap-airport-risks/">查看低价套餐风险 →</a></article>
+      <article><span>HOT 03</span><h3>机场月付还是年付</h3><p>月付方便退出，年付名义月均价较低。第一次使用时先用短周期验证常用节点、晚高峰和售后，再考虑长期购买。</p><a href="/knowledge/monthly-vs-annual-plan/">比较月付与年付 →</a></article>
+      <article><span>HOT 04</span><h3>机场套餐价格与流量</h3><p>同时记录原价、折后价、GB 数、流量重置日期和倍率。高流量不一定适合轻量用户，一次性流量包可能更适合低频需求。</p><a href="/compare/">查看套餐横向对比 →</a></article>
+      <article><span>HOT 05</span><h3>机场节点速度与稳定性</h3><p>优惠不能证明线路质量。速度、延迟、丢包、晚高峰和节假日承载要分开观察，单次测速图不能代表长期体验。</p><a href="/reviews/">查看机场测评框架 →</a></article>
+      <article><span>HOT 06</span><h3>机场官网与注册地址</h3><p>搜索注册地址时要核对当前域名、服务主体和售后入口，避免仿冒页面。本站入口来自推荐榜记录并标注推广关系。</p><a href="/recommend/">核对推荐榜入口 →</a></article>
+    </div>
+  </section>
+
+  <section class="deal-scenarios" aria-labelledby="deal-scenarios-title">
+    <div class="deal-scenarios__title"><span>按需求领取</span><h2 id="deal-scenarios-title">不是折扣越大越好，而是套餐要刚好够用</h2></div>
+    <div class="deal-scenario-list">
+      <article><b>新手试用</b><h3>优先月付与低门槛档</h3><p>先验证客户端兼容、常用地区节点和售后入口，不要第一次就购买多年套餐。</p><em>重点看：月付价格、退款条款、订阅更新</em></article>
+      <article><b>学生与轻量用户</b><h3>关注年付小包是否参与优惠</h3><p>60GB/月一类小包适合浏览和轻量使用，但常见情况是活动码不适用于特价年付包。</p><em>重点看：月均成本、流量重置、倍率</em></article>
+      <article><b>影音与 AI 工具</b><h3>折后价之外还要比较稳定性</h3><p>流量较大的月付套餐更灵活，同时应观察晚高峰、常用地区和多设备规则。</p><em>重点看：中高流量、晚高峰、设备数</em></article>
+      <article><b>低频备用</b><h3>一次性流量包可能更合适</h3><p>不需要每月持续使用时，可比较不限时或一次性流量包，并确认有效期和节点限制。</p><em>重点看：有效期、可用节点、是否重置</em></article>
+    </div>
+  </section>
+
+  <section class="deal-calendar" aria-labelledby="deal-calendar-title"><div><span>活动观察</span><h2 id="deal-calendar-title">常见促销节点，不等于一定有优惠</h2><p>周年庆、节假日、双 11、黑色星期五和年末活动是常见搜索词，但具体折扣、截止日期和参加套餐必须以当期结算页为准。本站不会把历史活动写成仍然有效。</p></div><ul><li><strong>活动开始前</strong><span>记录原价，避免把日常价格包装成限时折扣。</span></li><li><strong>结算支付前</strong><span>确认优惠码已生效，并核对最终金额和套餐周期。</span></li><li><strong>活动结束后</strong><span>记录续费价、流量重置和退款限制。</span></li></ul></section>
+
+  <section class="deal-guide" aria-labelledby="deal-guide-title"><div class="deal-guide__intro"><span>BENEFIT CHECKLIST</span><h2 id="deal-guide-title">福利不只看折扣，更要看是否适合</h2><p>把优惠码放回套餐、周期和使用需求中判断，才能看清真实成本。</p></div><div class="deal-guide__items">
+    <article><b>01</b><h3>核对适用套餐</h3><p>确认优惠是否支持月付、季付、半年付、年付小包与一次性流量包。</p></article>
+    <article><b>02</b><h3>计算折后总价</h3><p>不要只看“7 折”字样，应在支付前确认订单总价确实发生变化。</p></article>
+    <article><b>03</b><h3>查看续费价格</h3><p>首期优惠不等于长期优惠，确认续费是否恢复原价以及能否继续使用优惠码。</p></article>
+    <article><b>04</b><h3>优先短周期验证</h3><p>新服务先选择月付、小额或低成本档位，验证常用地区、晚高峰和售后。</p></article>
+    <article><b>05</b><h3>核对倍率和流量</h3><p>折后便宜不代表流量成本低，还要检查节点倍率、重置日期和设备限制。</p></article>
+    <article><b>06</b><h3>保存订单证据</h3><p>保留结算页、优惠结果、退款政策和订单记录，出现争议时方便核对。</p></article>
+  </div></section>
+
+  <section class="deal-faq" aria-labelledby="deal-faq-title"><header><div class="eyebrow">热门问题</div><h2 id="deal-faq-title">机场 VPN 福利中心常见问答</h2></header><div>
+    <details open><summary>机场优惠码应该在哪里填写？</summary><p>通常在订单确认或结算页面填写。输入后应看到订单总价变化再支付；如果只显示成功但价格未变，应先询问官方售后。</p></details>
+    <details><summary>7 折优惠码可以用于所有套餐吗？</summary><p>不一定。特价年付小包、一次性流量包、余额充值和续费可能不参加活动，最终以结算页面为准。</p></details>
+    <details><summary>机场年付和月付哪个更划算？</summary><p>年付通常月均价格较低，月付退出成本更低。第一次接触某项服务时，先月付验证线路和售后更稳妥。</p></details>
+    <details><summary>优惠码失效或无法使用怎么办？</summary><p>检查大小写、空格、活动期限、用户身份和套餐周期。不要从不明页面寻找所谓内部码。</p></details>
+    <details><summary>低价机场或免费 VPN 值得使用吗？</summary><p>价格只是一个维度，还要评估隐私、持续运营、设备限制、售后和退款，不应用于重要账户或敏感数据。</p></details>
+    <details><summary>使用优惠码会影响退款吗？</summary><p>部分活动套餐可能排除退款。支付前应保存结算页，并阅读退款窗口、已用流量和促销套餐限制。</p></details>
+  </div></section>
+
+  <section class="deal-actions"><div><span>还不知道选哪一个？</span><h2>先看推荐理由，再领取对应优惠</h2><p>机场推荐页按套餐结构、适用人群和公开资料整理了完整候选清单。</p></div><a href="/recommend/">查看机场推荐榜 →</a><a href="/compare/">查看机场横向对比 →</a></section>
+</section>
+
+<script is:inline>
+document.querySelectorAll('.deal-copy').forEach(button=>button.addEventListener('click',async()=>{const code=button.dataset.coupon||'';const status=button.parentElement.querySelector('.deal-copy-status');try{if(!navigator.clipboard)throw new Error('clipboard unavailable');await navigator.clipboard.writeText(code);button.textContent='已复制';if(status)status.textContent=`已复制 ${code}`;}catch{button.textContent='请手动复制';if(status)status.textContent=`复制失败，请手动复制优惠码 ${code}`;}setTimeout(()=>{button.textContent=button.closest('.compact')?'复制':'复制优惠码';if(status)status.textContent='';},1800);}));
+</script>

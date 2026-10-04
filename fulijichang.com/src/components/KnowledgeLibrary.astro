@@ -1,0 +1,8 @@
+---
+import { knowledgeGuides, knowledgeGroups } from '../data/knowledgeGuides';
+---
+<section class="knowledge-library" aria-labelledby="knowledge-library-title">
+  <header class="knowledge-library__head"><div class="eyebrow">35 篇实用指南</div><h2 id="knowledge-library-title">从客户端使用到机场常见问题</h2><p>按搜索意图组织，每篇聚焦一个具体问题。内容强调合法合规、来源核验、凭据保护和可复核排查。</p></header>
+  <nav class="knowledge-group-nav" aria-label="知识库文章分组">{knowledgeGroups.map(group=><a href={`#group-${group.replace(/\s+/g,'-')}`}>{group}</a>)}</nav>
+  {knowledgeGroups.map(group => <section class="knowledge-group" id={`group-${group.replace(/\s+/g,'-')}`}><div class="knowledge-group__title"><h3>{group}</h3><span>{knowledgeGuides.filter(item=>item.group===group).length} 篇</span></div><div class="knowledge-guide-grid">{knowledgeGuides.filter(item=>item.group===group).map((item,index)=><article><span>{String(index+1).padStart(2,'0')}</span><h4><a href={`/knowledge/${item.slug}/`}>{item.title}</a></h4><p>{item.description}</p><div>{item.keywords.slice(0,3).map(keyword=><small>{keyword}</small>)}</div></article>)}</div></section>)}
+</section>

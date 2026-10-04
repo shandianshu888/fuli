@@ -1,0 +1,15 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+---
+<BaseLayout title="友链" description="福利机场观察的友情链接与合作说明。" canonical="/friends/">
+  <Breadcrumbs items={[{name:'关于我们', href:'/about/'}, {name:'友链'}]}/>
+  <header class="page-head"><div class="container"><h1>友链</h1><p>与认真分享公开信息、工具经验和网络知识的站点互相连接。</p></div></header>
+  <article class="container section prose">
+    <h2>交换友链</h2>
+    <p>如果你也维护一个长期更新、内容真实且遵守法律法规的网站，欢迎通过<a href="/contact/">联系与纠错页面</a>提交站点名称、首页地址和简短介绍。我们会在核验后加入友链。</p>
+    <div class="info-box friend-link-note"><strong>友链基本要求</strong><ul><li>站点可以正常访问，内容持续更新。</li><li>不收录违法、侵权、恶意跳转或过度广告页面。</li><li>链接失效或内容方向发生变化时，我们会及时调整。</li></ul></div>
+    <h2>本站信息</h2>
+    <p><strong>名称：</strong>福利机场观察<br/><strong>地址：</strong><a href="/">https://fulijichang.com/</a><br/><strong>简介：</strong>面向中文网络服务用户的独立内容博客，提供服务选择、方案对比、知识科普、福利信息与风险观察。</p>
+  </article>
+</BaseLayout>

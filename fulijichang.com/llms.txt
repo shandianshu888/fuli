@@ -1,0 +1,13 @@
+# 福利机场观察
+
+> 中文网络服务公开信息、知识科普、方案比较与风险观察。
+
+## 核心栏目
+- [机场推荐](https://fulijichang.com/recommend/)
+- [机场对比](https://fulijichang.com/compare/)
+- [机场测评](https://fulijichang.com/reviews/)
+- [知识库](https://fulijichang.com/knowledge/)
+- [福利中心](https://fulijichang.com/deals/)
+- [服务风险与失联案例观察](https://fulijichang.com/risk/)
+
+内容区分公开事实、用户反馈和编辑观点；具体依据及更新时间见各文章。

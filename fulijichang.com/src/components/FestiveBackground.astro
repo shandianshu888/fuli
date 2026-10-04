@@ -1,0 +1,14 @@
+---
+const flakes = Array.from({length:42},(_,index) => {
+  const left = `${(index * 37 + 3) % 98}%`;
+  const duration = `${14 + (index * 7) % 15}s`;
+  const delay = `-${2 + (index * 11) % 29}s`;
+  const size = `${20 + (index * 9) % 27}px`;
+  const rotate = `${-26 + (index * 13) % 53}deg`;
+  return [left,duration,delay,size,rotate];
+});
+---
+
+<div class="festive-fu" aria-hidden="true">
+  {flakes.map(([left,duration,delay,size,rotate]) => <span style={`--left:${left};--duration:${duration};--delay:${delay};--size:${size};--rotate:${rotate}`}>福</span>)}
+</div>

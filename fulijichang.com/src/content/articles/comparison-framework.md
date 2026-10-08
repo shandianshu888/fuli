@@ -2,7 +2,7 @@
 title: "16 家机场横向对比：价格、节点稳定性、高峰期与节假日观察"
 description: "按照机场推荐榜顺序，对比 16 项候选服务的公开价格、套餐结构、优惠信息与证据状态，并说明节点稳定性、晚高峰和节假日表现应如何持续测试。"
 publishDate: 2026-09-20
-updatedDate: 2026-10-03
+updatedDate: 2026-10-08
 author: "周言"
 reviewer: "林舟"
 category: compare
@@ -15,15 +15,15 @@ sources:
   - title: "机场眼"
     url: "https://jichangyan.com"
     publisher: "机场眼"
-    accessed: 2026-10-03
+    accessed: 2026-10-08
   - title: "机场精准查"
     url: "https://jcjingzhuncha.com"
     publisher: "机场精准查"
-    accessed: 2026-10-03
+    accessed: 2026-10-08
   - title: "机场雷达"
     url: "https://jcleida.com"
     publisher: "机场雷达"
-    accessed: 2026-10-03
+    accessed: 2026-10-08
 faq:
   - question: "哪一家机场在晚高峰最稳定？"
     answer: "目前没有覆盖全部服务、全部地区且测试条件一致的长期数据，因此不能给出可信的统一第一名。应在自己的网络环境中连续测试至少七天。"
@@ -37,7 +37,7 @@ noindex: false
 
 **简要结论：价格和流量只能帮助缩小候选范围，不能证明节点稳定。** 本文按照本站“机场推荐”的相同顺序整理 16 项服务，明确区分套餐截图、公开资料摘要、尚未统一测试的运行表现和编辑建议。
 
-> 更新时间：2026 年 10 月 3 日。套餐、优惠和入口可能发生变化，请以服务商结算页和服务条款为准。节点体验还会受到所在地、运营商、设备、协议和测试时段影响。
+> 更新时间：2026 年 10 月 8 日。套餐、优惠和入口可能发生变化，请以服务商结算页和服务条款为准。节点体验还会受到所在地、运营商、设备、协议和测试时段影响。
 
 <div class="comparison-key-points" aria-label="对比文章阅读重点">
   <div><strong>先看门槛</strong><span>价格、流量、周期与倍率决定是否进入候选清单</span></div>

@@ -7,12 +7,12 @@ import { knowledgeGuides, type KnowledgeGuide } from '../../data/knowledgeGuides
 export function getStaticPaths(){return knowledgeGuides.map(guide=>({params:{slug:guide.slug},props:{guide}}));}
 const {guide}=Astro.props as {guide:KnowledgeGuide};
 const current=knowledgeGuides.findIndex(item=>item.slug===guide.slug);const related=[1,2,3].map(offset=>knowledgeGuides[(current+offset)%knowledgeGuides.length]);
-const canonical=`/knowledge/${guide.slug}/`;const updated='2026-10-03';
+const canonical=`/knowledge/${guide.slug}/`;const updated='2026-10-08';
 const schemas=[{'@context':'https://schema.org','@type':'Article',headline:guide.title,description:guide.description,datePublished:updated,dateModified:updated,author:{'@type':'Person',name:'周言'},editor:{'@type':'Person',name:'林舟'},mainEntityOfPage:new URL(canonical,SITE.url).toString(),publisher:{'@type':'Organization',name:SITE.name,url:SITE.url}},{'@context':'https://schema.org','@type':'BreadcrumbList',itemListElement:[{'@type':'ListItem',position:1,name:'首页',item:SITE.url},{'@type':'ListItem',position:2,name:'知识库',item:new URL('/knowledge/',SITE.url).toString()},{'@type':'ListItem',position:3,name:guide.title,item:new URL(canonical,SITE.url).toString()}]},{'@context':'https://schema.org','@type':'FAQPage',mainEntity:guide.faq.map(item=>({'@type':'Question',name:item.question,acceptedAnswer:{'@type':'Answer',text:item.answer}}))}];
 ---
 <BaseLayout title={guide.title} description={guide.description} canonical={canonical} type="article" schema={schemas}>
   <Breadcrumbs items={[{name:'知识库',href:'/knowledge/'},{name:guide.title}]}/>
-  <article><header class="page-head knowledge-detail-head"><div class="container"><div class="eyebrow">{guide.group}</div><h1>{guide.title}</h1><p class="article-intro">{guide.description}</p><div class="meta">作者：周言 · 审核：林舟 · 更新于 <time datetime={updated}>2026年10月3日</time> · 约 5 分钟阅读</div></div></header>
+  <article><header class="page-head knowledge-detail-head"><div class="container"><div class="eyebrow">{guide.group}</div><h1>{guide.title}</h1><p class="article-intro">{guide.description}</p><div class="meta">作者：周言 · 审核：林舟 · 更新于 <time datetime={updated}>2026年10月8日</time> · 约 5 分钟阅读</div></div></header>
   <div class="container section knowledge-detail-layout"><div class="prose">
     <div class="knowledge-answer"><span>先说结论</span><p>{guide.conclusion}</p></div>
     <h2>操作与判断步骤</h2><ol>{guide.steps.map(step=><li>{step}</li>)}</ol>

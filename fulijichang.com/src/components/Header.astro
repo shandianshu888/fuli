@@ -6,17 +6,44 @@ const path = Astro.url.pathname;
   <a class="brand" href="/">福利机场观察<small>公开信息 · 独立判断 · 合规使用</small></a>
   <button class="icon-button menu-button" id="menu-button" aria-expanded="false" aria-controls="main-nav" aria-label="打开导航">☰</button>
   <nav class="nav" id="main-nav" aria-label="主导航">
-    {Object.values(CATEGORIES).map((item) => <a href={item.path} aria-current={path.startsWith(item.path) ? 'page' : undefined}>{item.name}</a>)}
+    {Object.entries(CATEGORIES).map(([key, item]) => (
+      <a 
+        href={item.path} 
+        class={`nav-link nav-link-${key}`}
+        data-nav-key={key}
+        aria-current={path.startsWith(item.path) ? 'page' : undefined}
+      >
+        <span class="nav-dot" aria-hidden="true"></span>
+        <span class="nav-label">{item.name}</span>
+      </a>
+    ))}
     <div class="nav-dropdown" data-nav-dropdown>
-      <button class="nav-dropdown-trigger" type="button" aria-expanded="false" aria-controls="about-subnav">关于我们 <span aria-hidden="true">⌄</span></button>
+      <button 
+        class={`nav-dropdown-trigger nav-link nav-link-about ${path.startsWith('/about/') || path.startsWith('/friends/') ? 'is-active' : ''}`}
+        type="button" 
+        aria-expanded="false" 
+        aria-controls="about-subnav"
+      >
+        <span class="nav-dot" aria-hidden="true"></span>
+        <span class="nav-label">关于我们</span> 
+        <span aria-hidden="true" class="chevron">⌄</span>
+      </button>
       <div class="nav-dropdown-menu" id="about-subnav" hidden>
         <a href="/about/" aria-current={path === '/about/' ? 'page' : undefined}>关于我们</a>
         <a href="/friends/" aria-current={path.startsWith('/friends/') ? 'page' : undefined}>友链</a>
       </div>
     </div>
-    <a class="search-link" href="/search/" aria-current={path === '/search/' ? 'page' : undefined}>⌕ 搜索</a>
+    <a 
+      class={`search-link nav-link nav-link-search`}
+      href="/search/" 
+      aria-current={path === '/search/' ? 'page' : undefined}
+    >
+      <span class="nav-dot" aria-hidden="true"></span>
+      <span class="nav-label">⌕ 搜索</span>
+    </a>
   </nav>
 </div></header>
+
 <script is:inline>
   const button=document.querySelector('#menu-button');const nav=document.querySelector('#main-nav');
   button?.addEventListener('click',()=>{const open=button.getAttribute('aria-expanded')!=='true';button.setAttribute('aria-expanded',String(open));button.setAttribute('aria-label',open?'关闭导航':'打开导航');nav?.setAttribute('data-open',String(open))});
@@ -28,7 +55,209 @@ const path = Astro.url.pathname;
     dropdown.addEventListener('focusout',(event)=>{if(!dropdown.contains(event.relatedTarget)){trigger?.setAttribute('aria-expanded','false');if(menu) menu.hidden=true}});
   });
 </script>
+
 <style>
-  .nav-dropdown{position:relative}.nav-dropdown-trigger{border:0;background:none;color:var(--ink);cursor:pointer;font:inherit;font-size:14px;padding:0}.nav-dropdown-trigger span{display:inline-block;margin-left:2px;transition:transform .2s}.nav-dropdown-trigger[aria-expanded="true"] span{transform:rotate(180deg)}.nav-dropdown-menu{position:absolute;top:calc(100% + 18px);left:50%;transform:translateX(-50%);min-width:128px;padding:7px;background:var(--surface);border:1px solid var(--line);box-shadow:0 10px 24px rgba(21,35,29,.12);z-index:3}.nav-dropdown-menu a{display:block;padding:7px 10px;white-space:nowrap}.nav-dropdown-menu a:hover{background:#eef3ee}
-  @media(max-width:850px){.nav-dropdown-menu{position:static;transform:none;box-shadow:none;border:0;border-top:1px solid var(--line);margin-top:8px;padding:4px 0 0 14px}.nav-dropdown-menu a{padding:5px 0}}
+  /* Header Nav Container */
+  .nav {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: auto;
+  }
+
+  .nav-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    color: var(--ink);
+    position: relative;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    white-space: nowrap;
+  }
+
+  .nav-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    display: inline-block;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+    opacity: 0.8;
+  }
+
+  .nav-link:hover .nav-dot {
+    transform: scale(1.4);
+    opacity: 1;
+  }
+
+  /* Distinct Navigation Theme Colors */
+  /* 1. 机场推荐 - Crimson Red */
+  .nav-link-recommend { --theme-color: #d9383a; --theme-bg: rgba(217, 56, 58, 0.08); --theme-shadow: rgba(217, 56, 58, 0.28); }
+  .nav-link-recommend .nav-dot { background-color: #d9383a; }
+
+  /* 2. 机场对比 - Sunset Orange */
+  .nav-link-compare { --theme-color: #d97706; --theme-bg: rgba(217, 119, 6, 0.08); --theme-shadow: rgba(217, 119, 6, 0.28); }
+  .nav-link-compare .nav-dot { background-color: #d97706; }
+
+  /* 3. 机场测评 - Royal Purple */
+  .nav-link-reviews { --theme-color: #8e44ad; --theme-bg: rgba(142, 68, 173, 0.08); --theme-shadow: rgba(142, 68, 173, 0.28); }
+  .nav-link-reviews .nav-dot { background-color: #8e44ad; }
+
+  /* 4. 知识库 - Ocean Blue */
+  .nav-link-knowledge { --theme-color: #2980b9; --theme-bg: rgba(41, 128, 185, 0.08); --theme-shadow: rgba(41, 128, 185, 0.28); }
+  .nav-link-knowledge .nav-dot { background-color: #2980b9; }
+
+  /* 5. 福利中心 - Emerald Green */
+  .nav-link-deals { --theme-color: #1b8a4c; --theme-bg: rgba(27, 138, 76, 0.08); --theme-shadow: rgba(27, 138, 76, 0.28); }
+  .nav-link-deals .nav-dot { background-color: #1b8a4c; }
+
+  /* 6. 问题解答 - Vibrant Teal */
+  .nav-link-faq { --theme-color: #0d9488; --theme-bg: rgba(13, 148, 136, 0.08); --theme-shadow: rgba(13, 148, 136, 0.28); }
+  .nav-link-faq .nav-dot { background-color: #0d9488; }
+
+  /* 7. 风险与失联观察 - Warning Rose */
+  .nav-link-risk { --theme-color: #be123c; --theme-bg: rgba(190, 18, 60, 0.08); --theme-shadow: rgba(190, 18, 60, 0.28); }
+  .nav-link-risk .nav-dot { background-color: #be123c; }
+
+  /* 8. 关于我们 - Deep Indigo */
+  .nav-link-about { --theme-color: #4f46e5; --theme-bg: rgba(79, 70, 229, 0.08); --theme-shadow: rgba(79, 70, 229, 0.28); }
+  .nav-link-about .nav-dot { background-color: #4f46e5; }
+
+  /* 9. 搜索 - Golden Amber */
+  .nav-link-search { --theme-color: #b45309; --theme-bg: rgba(180, 83, 9, 0.08); --theme-shadow: rgba(180, 83, 9, 0.28); }
+  .nav-link-search .nav-dot { background-color: #b45309; }
+
+  /* Hover States */
+  .nav-link:hover {
+    color: var(--theme-color);
+    background-color: var(--theme-bg);
+    transform: translateY(-1px);
+  }
+
+  /* Active State (aria-current="page" or .is-active) */
+  .nav-link[aria-current="page"],
+  .nav-link.is-active {
+    color: #ffffff !important;
+    background-color: var(--theme-color) !important;
+    box-shadow: 0 4px 12px var(--theme-shadow);
+  }
+  .nav-link[aria-current="page"] .nav-dot,
+  .nav-link.is-active .nav-dot {
+    background-color: #ffffff !important;
+  }
+
+  /* Remove legacy border-bottom hover line */
+  .nav a[aria-current="page"]::after {
+    display: none !important;
+  }
+
+  /* Dropdown Styles */
+  .nav-dropdown {
+    position: relative;
+  }
+  .nav-dropdown-trigger {
+    border: 0;
+    background: none;
+    cursor: pointer;
+    font: inherit;
+  }
+  .chevron {
+    display: inline-block;
+    margin-left: 2px;
+    font-size: 11px;
+    transition: transform 0.2s ease;
+  }
+  .nav-dropdown-trigger[aria-expanded="true"] .chevron {
+    transform: rotate(180deg);
+  }
+  .nav-dropdown-menu {
+    position: absolute;
+    top: calc(100% + 10px);
+    left: 50%;
+    transform: translateX(-50%);
+    min-width: 130px;
+    padding: 6px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    box-shadow: 0 10px 24px rgba(21,35,29,0.12);
+    z-index: 30;
+  }
+  .nav-dropdown-menu a {
+    display: block;
+    padding: 8px 12px;
+    white-space: nowrap;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 13px;
+    color: var(--ink);
+    font-weight: 500;
+  }
+  .nav-dropdown-menu a:hover {
+    background: var(--theme-bg, #eef3ee);
+    color: var(--theme-color, var(--brand));
+  }
+  .nav-dropdown-menu a[aria-current="page"] {
+    background: var(--theme-color, #4f46e5);
+    color: #ffffff;
+  }
+
+  /* Responsive Mobile Layout */
+  @media (max-width: 960px) {
+    .header-inner {
+      min-height: 64px;
+    }
+    .nav {
+      gap: 3px;
+    }
+    .nav-link {
+      padding: 6px 9px;
+      font-size: 13px;
+    }
+  }
+
+  @media (max-width: 850px) {
+    .menu-button {
+      display: grid;
+      margin-left: auto;
+    }
+    .nav {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: white;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--line);
+      flex-direction: column;
+      align-items: stretch;
+      box-shadow: 0 12px 24px rgba(0,0,0,0.08);
+      gap: 8px;
+    }
+    .nav[data-open="true"] {
+      display: flex;
+    }
+    .nav-link {
+      padding: 10px 14px;
+      font-size: 15px;
+      border-radius: 8px;
+    }
+    .nav-dropdown-menu {
+      position: static;
+      transform: none;
+      box-shadow: none;
+      border: 0;
+      border-top: 1px solid var(--line);
+      margin-top: 6px;
+      padding: 6px 0 0 14px;
+    }
+    .nav-dropdown-menu a {
+      padding: 8px 12px;
+    }
+  }
 </style>

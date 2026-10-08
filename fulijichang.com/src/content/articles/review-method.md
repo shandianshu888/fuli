@@ -2,7 +2,7 @@
 title: "机场测评如何记录：一次可复核的体验模板"
 description: "说明测评文章应如何记录环境、时间、样本与限制，避免把单次速度或个人感受写成服务长期表现。"
 publishDate: 2026-09-22
-updatedDate: 2026-10-02
+updatedDate: 2026-10-08
 author: "周言"
 reviewer: "编辑部"
 category: reviews
@@ -15,7 +15,7 @@ sources:
   - title: "RFC 2330: Framework for IP Performance Metrics"
     url: "https://www.rfc-editor.org/rfc/rfc2330"
     publisher: "RFC Editor"
-    accessed: 2026-10-02
+    accessed: 2026-10-08
 faq: []
 noindex: false
 ---

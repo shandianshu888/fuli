@@ -1,0 +1,15 @@
+---
+import CategoryLayout from '../layouts/CategoryLayout.astro';
+import FAQHub from '../components/FAQHub.astro';
+import { CATEGORIES } from '../consts';
+import { getCollection } from 'astro:content';
+import { newest } from '../utils/articles';
+
+const value = CATEGORIES.faq;
+const all = newest(await getCollection('articles'));
+const items = all.filter(a => a.data.category === 'faq');
+---
+
+<CategoryLayout name={value.name} intro={value.intro} path={value.path} articles={items} current={1}>
+  <FAQHub />
+</CategoryLayout>

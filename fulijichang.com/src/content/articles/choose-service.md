@@ -2,7 +2,7 @@
 title: "机场推荐怎么选：先建立可验证的五项标准"
 description: "一份不依赖具体品牌的新手选择框架，从需求、预算、服务条款、支持渠道和退出成本五个方面缩小候选范围。"
 publishDate: 2026-09-18
-updatedDate: 2026-10-03
+updatedDate: 2026-10-08
 author: "林舟"
 reviewer: "编辑部"
 category: recommend
@@ -15,7 +15,7 @@ sources:
   - title: "消费者权益保护法实施条例"
     url: "https://www.gov.cn/zhengce/content/202404/content_6944443.htm"
     publisher: "中国政府网"
-    accessed: 2026-10-03
+    accessed: 2026-10-08
 faq:
   - question: "新手应该先买长期套餐吗？"
     answer: "不建议只因折扣直接购买长期套餐。先用短周期验证服务是否符合需求，并确认退款、续费与售后条款。"

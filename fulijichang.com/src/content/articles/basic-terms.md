@@ -2,7 +2,7 @@
 title: "网络服务新手知识库：套餐、延迟与售后术语"
 description: "用中性语言解释套餐周期、延迟、吞吐、丢包、服务等级与工单等常见术语，帮助新手读懂产品页面。"
 publishDate: 2026-09-24
-updatedDate: 2026-10-03
+updatedDate: 2026-10-08
 author: "林舟"
 reviewer: "周言"
 category: knowledge
@@ -15,7 +15,7 @@ sources:
   - title: "RFC 6349: Framework for TCP Throughput Testing"
     url: "https://www.rfc-editor.org/rfc/rfc6349"
     publisher: "RFC Editor"
-    accessed: 2026-10-03
+    accessed: 2026-10-08
 faq:
   - question: "延迟低就代表服务一定稳定吗？"
     answer: "不代表。延迟只是指标之一，还需结合抖动、丢包、时段差异和长期可用性观察。"

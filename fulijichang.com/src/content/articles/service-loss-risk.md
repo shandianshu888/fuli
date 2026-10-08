@@ -2,7 +2,7 @@
 title: "服务失联与“跑路机场”：如何识别信号并降低损失"
 description: "解释服务失联和“跑路机场”搜索词背后的常见风险信号，提供基于公开事实的记录、核验与损失控制方法。"
 publishDate: 2026-09-30
-updatedDate: 2026-10-03
+updatedDate: 2026-10-08
 author: "周言"
 reviewer: "林舟"
 category: risk
@@ -15,7 +15,7 @@ sources:
   - title: "全国消协智慧315平台"
     url: "https://315.cca.cn/"
     publisher: "中国消费者协会"
-    accessed: 2026-10-03
+    accessed: 2026-10-08
 faq:
   - question: "短时无法访问能否认定服务跑路？"
     answer: "不能。短时故障可能由维护、网络、域名或第三方系统引起。认定具体原因需要持续观察和可核验信息。"

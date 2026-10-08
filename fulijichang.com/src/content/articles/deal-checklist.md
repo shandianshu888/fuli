@@ -2,7 +2,7 @@
 title: "福利中心核验清单：优惠之前先看六条规则"
 description: "结合福利中心已整理的机场优惠码，说明如何核对适用套餐、折后总价、续费价格、退款限制和活动真实性。"
 publishDate: 2026-09-27
-updatedDate: 2026-10-03
+updatedDate: 2026-10-08
 author: "林舟"
 reviewer: "编辑部"
 category: deals

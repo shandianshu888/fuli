@@ -1,0 +1,474 @@
+---
+const faqCategories = [
+  {
+    id: "selection",
+    title: "热门概念与选购问答",
+    icon: "💡",
+    color: "#d9383a",
+    items: [
+      {
+        q: "一元机场究竟靠不靠谱？一元套餐背后的机制与隐性限制解析",
+        a: "一元机场通常作为低成本引流手段。其背后的常见运作机制是提供有限的共享流量或极高节点倍率（如 10x 扣费），并在公网线路上进行高密度超卖。适合作为紧急临时备用，不建议作为主要工作或高清视频的首选网络。"
+      },
+      {
+        q: "免费机场与免费节点能长期用吗？安全性与隐私风险分析",
+        a: "免费公益节点或广告型免费机场普遍存在极高的安全隐患。由于缺少商业运维预算，部分免费节点可能存在中间人 (MITM) 流量数据监听、暗带广告注入以及随时断连失联的问题。切勿在免费节点环境下登录重要银行、邮箱或社交账户。"
+      },
+      {
+        q: "什么是“赔钱机场”？超低价大流量套餐是如何运作的？",
+        a: "市场上所谓的‘赔钱机场’多为宣传口号。其运作原理主要靠‘后付费公网带宽 + 限制高峰期单用户吞吐’，或通过吸引大量用户购买低价年付包形成资金池。若后续没有持续新用户加入，极易引发资金链断裂导致跑路失联。建议逢大促切勿盲目预付长期大额费用。"
+      },
+      {
+        q: "按量付费（不限时流量包）与按月订阅套餐到底哪个更省钱？",
+        a: "按量付费套餐（流量永不过期）适合轻度浏览、偶尔查资料或作为备用网络的用户，性价比极高；按月订阅套餐提供每月固定额度，适合每日需要长时间观看 4K 视频、下载大文件或经常跨国远程办公的高频用户。"
+      },
+      {
+        q: "什么是机场的“节点倍率”（如 0.1x / 1x / 5x / 10x）？",
+        a: "节点倍率决定了你消耗实际流量与扣除套餐流量的比率。例如使用 10 GB 流量，在 0.1x 节点仅扣除 1 GB 额度，而在 10x 高倍率专线节点会扣除 100 GB 额度。使用前务必在客户端查看倍率标注，避免误用高倍率节点导致流量快速耗尽。"
+      },
+      {
+        q: "机场套餐中的“IEPL/IPLC 专线”和“公网中转”有什么区别？",
+        a: "IPLC/IEPL 专线通过内网专线传输，不经过公网防火墙设备，具有极低延迟、极小丢包和极高稳定性的特点；公网中转则依赖普通骨干网中转，高峰期易受公网拥堵影响。专线适合对游戏、直播和重要办公有极致稳定性要求的用户。"
+      }
+    ]
+  },
+  {
+    id: "config",
+    title: "小火箭与常用客户端配置问答",
+    icon: "🚀",
+    color: "#2980b9",
+    items: [
+      {
+        q: "小火箭 (Shadowrocket) 如何正确添加与自动更新机场订阅？",
+        a: "在小火箭首页点击右上角 ‘+’ 号，类型选择 Subscribe，粘贴机场给出的订阅链接并保存。随后在‘设置’ -> ‘订阅’中开启‘打开应用时更新’与‘自动更新’（建议间隔 12 小时），即可确保节点列表实时同步最新的服务器地址。"
+      },
+      {
+        q: "小火箭连接后节点全部显示“超时 / 黄色 / 红色延迟”怎么排查？",
+        a: "首先排查订阅 URL 复制是否夹带了尾部空格；其次检查 iPhone 设备系统时间是否开启了‘自动设置’（时间偏差超 30 秒会导致 TLS 证书握手失败）；接着在小火箭首页将‘全局路由’切换为‘配置’；若依然不行，可尝试关闭 Wi-Fi 切换为移动数据重新拉取订阅。"
+      },
+      {
+        q: "小火箭的“全局路由”模式（配置、代理、直连、场景）应该怎么选？",
+        a: "日常使用强力推荐选择‘配置’模式，客户端会根据内置规则自动识别：国内网站直连访问，海外受限网站走节点代理。切勿长期开启‘代理’（全局模式），否则访问淘宝、微信等国内 App 会额外消耗节点流量且速度变慢。"
+      },
+      {
+        q: "苹果外区 (美区/日区) Apple ID 如何安全获取小火箭？",
+        a: "Shadowrocket 仅在非中国大陆区 App Store 上架。建议自行注册专属的美区或日区 Apple ID 并绑定礼品卡购买（费用约 $2.99）。切勿在 iPhone 系统的‘设置 -> iCloud’中直接登录他人共享账号，仅在 App Store 内切换账号登录，以防设备被远控锁死。"
+      },
+      {
+        q: "Clash Verge Rev / Mihomo Party 提示“系统代理开启失败”或“DNS 污染”怎么办？",
+        a: "Windows 系统上若开启系统代理失败，通常因为杀毒软件拦截了 TUN 驱动或端口被占用。建议右键以管理员身份运行客户端，并在设置中开启‘TUN 模式 (Tun Mode)’；如果打不开网页，可在设置中手动勾选‘DNS 智能覆写’并清除本地 DNS 缓存 (ipconfig /flushdns)。"
+      },
+      {
+        q: "Sing-box 与 v2rayNG 在安卓手机上哪个更省电更稳定？",
+        a: "Sing-box 基于全新核心开发，内存占用更小且在后台常驻时极为省电；v2rayNG 协议兼容性最强但对高倍率分流规则支持较重。建议在手机设置中将 Sing-box 或 v2rayNG 加入‘电池优化白名单’并开启‘后台保活’，防止系统休眠时断网。"
+      }
+    ]
+  },
+  {
+    id: "deals",
+    title: "优惠福利与支付避坑问答",
+    icon: "🏷️",
+    color: "#1b8a4c",
+    items: [
+      {
+        q: "优惠码输入后提示“无效”或“无法应用”是为什么？",
+        a: "优惠码无法应用通常有 4 种情况：1. 优惠码仅限新注册首单用户；2. 该折扣码仅适用于指定套餐周期（如限定季付或年付）；3. 优惠码已被领完或官方活动已截止；4. 粘贴时多带了不可见空格。可在福利中心查看最新核验过的有效优惠码。"
+      },
+      {
+        q: "使用优惠码购买的折后套餐，后续到期续费还是优惠价吗？",
+        a: "视优惠码属性而定：‘首单优惠码’仅在第一次下单结算时享有折扣，到期续费将恢复原价格；而‘循环/全周期优惠码’在以后每次手动或自动续费时均可持续享受折扣。购买前可在结算面板核对‘续费预计金额’。"
+      },
+      {
+        q: "机场充值付款后显示“待支付”或余额未到账怎么办？",
+        a: "由于第三方支付网关回调可能存在 1-5 分钟延迟，请先刷新订单页面。若超过 15 分钟仍未到账，请截图保存支付平台的‘商户订单号’与‘交易流水号’，在机场后台提交工单联系客服进行人工补单。"
+      },
+      {
+        q: "自动续费扣款在哪里取消？如何避免不知情情况下被扣费？",
+        a: "若通过支付宝或微信发卡网购买并勾选了周期扣款，请在支付宝‘设置 -> 支付设置 -> 免密支付/自动扣款’中取消对应商户授权；同时在机场后台的个人中心关闭‘到期自动从余额续费’开关。"
+      },
+      {
+        q: "机场购买支持哪些支付渠道？使用支付宝、微信与 USDT 的隐私差异",
+        a: "支付宝/微信支付便捷但包含国内个人支付信息；USDT (加密货币) 隐私防护最高但存在入金门槛与手续费。绝大多数正规机场均采用经过隐私剥离的第三方聚合支付网关，不会直接获取用户的真实银行卡号。"
+      },
+      {
+        q: "购买机场服务后觉得网速不满意，通常支持申请退款吗？",
+        a: "根据绝大多数机场的服务条款 (TOS)，网络服务属于即时交付的虚拟数字商品，通常不支持无理由退款。部分站点支持 24 小时内未消耗超过 1GB 流量的工单退款申请。因此建议初次接触新站点时坚守‘小额月付’原则。"
+      }
+    ]
+  },
+  {
+    id: "trouble",
+    title: "节点线路、速度与流媒体问答",
+    icon: "🌐",
+    color: "#8e44ad",
+    items: [
+      {
+        q: "为什么同一家机场在晚高峰（20:00-23:00）网速会明显变慢？",
+        a: "晚高峰是全网国际出口骨干网的网民使用最高峰，海缆出口带宽普遍面临严重拥堵与丢包。解决办法：优先切换至 IEPL 专线节点、选用基于 UDP 协议的 Hysteria 2 节点，或联系机场客服了解是否有入口备用域名。"
+      },
+      {
+        q: "ChatGPT 提示“Access Denied”或“IP 所在地不受支持”如何解决？",
+        a: "OpenAI 对机房公网 IP 风控极其严格。解决办法：1. 在节点列表中选择标注有‘ChatGPT 解锁’或‘原生 IP (Native IP)’的专线节点；2. 开启客户端的分流规则；3. 清除浏览器的 Cookie 和 LocalStorage，或使用无痕模式重新打开。"
+      },
+      {
+        q: "观看 Netflix、Disney+ 提示“您似乎在使用解除限制工具”怎么办？",
+        a: "流媒体平台会定期封禁被大流量复用的机房 IP。解决办法：切换至机场专门提供的‘Netflix/Disney+ 专属解锁节点’，并确认客户端规则中流媒体分流域名已走该专用节点。"
+      },
+      {
+        q: "Hysteria 2 (歇斯底里) 与 TUIC 协议为什么在弱网下表现特别突出？",
+        a: "传统 TCP 协议在遭遇 5% 丢包时会导致整体传输速率骤降；而 Hysteria 2 和 TUIC 基于 UDP 协议并结合了先进的拥塞控制算法（如 BBR），能够在高丢包、高延迟的劣质网络环境中实现极高的吞吐上限。"
+      },
+      {
+        q: "客户端里的 Ping 延迟、TCP 延迟与真实网页 HTTP 延迟有什么不同？",
+        a: "ICMP Ping 仅代表你的设备到中转入口服务器的网络响应；TCP 延迟代表连接建立时间；而真连接 (HTTP Test) 才真正代表节点经过出口落地服务器后访问外网网页的真实响应速度。评价节点质量应以 HTTP 真连接延迟为准。"
+      },
+      {
+        q: "多台设备同时在线使用同一个订阅，为什么会导致卡顿或断连？",
+        a: "每个套餐都有‘同时在线设备数 (Device limit)’限制。当多台设备同时进行大流量下载时，不仅会瞬间刷满套餐的最高带宽上限，超出的设备还会被服务端防火墙暂时关进‘黑名单’导致短时间断连。"
+      }
+    ]
+  },
+  {
+    id: "security",
+    title: "风险防控与账户安全问答",
+    icon: "🛡️",
+    color: "#be123c",
+    items: [
+      {
+        q: "机场突然“官网打不开”是跑路了吗？四步排查域名污染与备用入口",
+        a: "官网打不开并不等于跑路，九成以上是因为国内 DNS 域名污染。排查步骤：1. 开启已有代理节点再刷新官网；2. 查看官方 Telegram 频道或 Twitter 公告获取最新备用域名；3. 使用短链接解析查找订阅新入口；4. 连续 7 天无任何渠道响应才可判定为跑路。"
+      },
+      {
+        q: "注册机场账号时，如何保护主邮箱与个人主账号安全？",
+        a: "1. 绝不使用真实姓名作为用户名；2. 强烈建议使用专用的备用邮箱（如 Outlook 或 Gmail 别名）；3. 绝不复用与个人银行、社交软件相同的密码；4. 注册后立刻在个人中心开启二步验证 (2FA)。"
+      },
+      {
+        q: "什么是机场的“工单系统”？如何提交工单才能获得客服快速解决？",
+        a: "工单是机场最正规的售后沟通渠道。提问时切忌只发‘用不了’，应提供：1. 使用的客户端版本；2. 报错的具体节点名称；3. 错误提示截图或日志信息。清晰具体的描述能让运维人员数分钟内精准排查。"
+      },
+      {
+        q: "开启机场代理节点访问国内网站（如微信、淘宝、网银）有安全隐患吗？",
+        a: "只要客户端设置在‘配置模式 (Rule Mode)’，国内流量都是直接通过你本地网络直连访问，不经过机场服务器中转，因此完全安全。切勿长期开启‘全局代理 (Global Mode)’访问国内敏感账户。"
+      },
+      {
+        q: "如何识别机场发出的“大促活动”是正常优惠还是跑路前的套牢手段？",
+        a: "正常优惠通常在节假日推出（如双11、周年庆），且优惠力度合理（如 8 折到 9 折）；而跑路前兆的异常大促通常伴随着‘超低价永久套餐’、‘低至 1 折年付’、同时官方客服已数日不回工单。遇到此类情况切勿追加付款。"
+      },
+      {
+        q: "遭遇机场跑路失联后，如何保存证据并迅速完成止损与迁移？",
+        a: "1. 立即取消支付宝/微信中的任何自动扣款授权；2. 从客户端中清理失效的订阅链接，防止隐私泄露；3. 截图保存订单号与沟通记录；4. 总结经验，在选择新服务时缩短付款周期至月付。"
+      }
+    ]
+  }
+];
+---
+
+<div class="faq-hub">
+  <div class="faq-hero-box">
+    <div class="faq-quick-search">
+      <span class="faq-search-icon">🔍</span>
+      <input type="search" id="faq-search-input" placeholder="输入关键词搜索 30+ 常见问题，如：一元机场、小火箭、免费节点、倍率、ChatGPT、退款..." autocomplete="off" />
+    </div>
+    <div class="faq-nav-tabs" id="faq-tabs">
+      <button class="faq-tab active" data-target="all">🌟 全部 30 个解答</button>
+      {faqCategories.map(cat => (
+        <button class="faq-tab" data-target={cat.id}>
+          <span>{cat.icon}</span> {cat.title.replace('问答', '')}
+        </button>
+      ))}
+    </div>
+  </div>
+
+  <div id="faq-list-container">
+    {faqCategories.map(cat => (
+      <section class="faq-category-group" data-category={cat.id} style={`--group-theme: ${cat.color}`}>
+        <div class="faq-group-header">
+          <span class="faq-group-icon">{cat.icon}</span>
+          <h2>{cat.title}</h2>
+          <span class="faq-group-count">{cat.items.length} 个解答</span>
+        </div>
+        <div class="faq-items-list">
+          {cat.items.map((item, idx) => (
+            <details class="faq-item" data-search-text={`${item.q} ${item.a}`}>
+              <summary class="faq-summary">
+                <span class="faq-q-badge">Q{idx + 1}</span>
+                <span class="faq-q-text">{item.q}</span>
+                <span class="faq-arrow" aria-hidden="true">❯</span>
+              </summary>
+              <div class="faq-answer">
+                <div class="faq-a-badge">A</div>
+                <div class="faq-a-content">
+                  <p>{item.a}</p>
+                </div>
+              </div>
+            </details>
+          ))}
+        </div>
+      </section>
+    ))}
+  </div>
+
+  <div id="faq-no-results" class="empty" hidden>
+    🔍 未找到匹配的问题，请尝试输入其他关键词，或在上方导航切换分类。
+  </div>
+</div>
+
+<script is:inline>
+  document.addEventListener('DOMContentLoaded', () => {
+    const input = document.getElementById('faq-search-input');
+    const tabs = document.querySelectorAll('#faq-tabs .faq-tab');
+    const groups = document.querySelectorAll('.faq-category-group');
+    const items = document.querySelectorAll('.faq-item');
+    const noResults = document.getElementById('faq-no-results');
+
+    let currentTab = 'all';
+
+    function filterFAQ() {
+      const query = input ? input.value.trim().toLowerCase() : '';
+      let visibleCount = 0;
+
+      groups.forEach(group => {
+        const catId = group.getAttribute('data-category');
+        const matchesTab = (currentTab === 'all' || currentTab === catId);
+        let groupVisibleItems = 0;
+
+        const groupItems = group.querySelectorAll('.faq-item');
+        groupItems.forEach(item => {
+          const text = item.getAttribute('data-search-text')?.toLowerCase() || '';
+          const matchesQuery = !query || text.includes(query);
+
+          if (matchesTab && matchesQuery) {
+            item.removeAttribute('hidden');
+            if (query) item.setAttribute('open', 'true');
+            groupVisibleItems++;
+          } else {
+            item.setAttribute('hidden', 'true');
+          }
+        });
+
+        if (groupVisibleItems > 0) {
+          group.removeAttribute('hidden');
+          visibleCount += groupVisibleItems;
+        } else {
+          group.setAttribute('hidden', 'true');
+        }
+      });
+
+      if (noResults) {
+        noResults.hidden = (visibleCount > 0);
+      }
+    }
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        currentTab = tab.getAttribute('data-target') || 'all';
+        filterFAQ();
+      });
+    });
+
+    if (input) {
+      input.addEventListener('input', filterFAQ);
+    }
+  });
+</script>
+
+<style>
+  .faq-hub {
+    margin-top: 10px;
+  }
+  .faq-hero-box {
+    background: #fffdfa;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 32px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.03);
+  }
+  .faq-quick-search {
+    position: relative;
+    margin-bottom: 20px;
+  }
+  .faq-search-icon {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px;
+    pointer-events: none;
+  }
+  .faq-quick-search input {
+    width: 100%;
+    padding: 14px 16px 14px 48px;
+    border: 2px solid var(--line);
+    border-radius: 10px;
+    font-size: 15px;
+    background: #ffffff;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .faq-quick-search input:focus {
+    border-color: #0d9488;
+    box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.15);
+    outline: none;
+  }
+  .faq-nav-tabs {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .faq-tab {
+    border: 1px solid var(--line);
+    background: #f7f3ed;
+    color: var(--ink);
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .faq-tab:hover {
+    background: #ede6dc;
+    transform: translateY(-1px);
+  }
+  .faq-tab.active {
+    background: #0d9488;
+    color: #ffffff;
+    border-color: #0d9488;
+    box-shadow: 0 4px 12px rgba(13, 148, 136, 0.25);
+  }
+  .faq-category-group {
+    margin-bottom: 40px;
+    border-left: 4px solid var(--group-theme, #0d9488);
+    padding-left: 18px;
+  }
+  .faq-group-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+  .faq-group-icon {
+    font-size: 24px;
+  }
+  .faq-group-header h2 {
+    font-size: 22px;
+    margin: 0;
+    color: var(--ink);
+  }
+  .faq-group-count {
+    margin-left: auto;
+    font-size: 13px;
+    color: var(--muted);
+    background: #f2eae0;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-weight: 600;
+  }
+  .faq-items-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .faq-item {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .faq-item:hover {
+    border-color: var(--group-theme, #0d9488);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.04);
+  }
+  .faq-item[open] {
+    border-color: var(--group-theme, #0d9488);
+  }
+  .faq-summary {
+    padding: 16px 20px;
+    cursor: pointer;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    list-style: none;
+    user-select: none;
+  }
+  .faq-summary::-webkit-details-marker {
+    display: none;
+  }
+  .faq-q-badge {
+    background: var(--group-theme, #0d9488);
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 800;
+    padding: 3px 8px;
+    border-radius: 6px;
+    flex-shrink: 0;
+  }
+  .faq-q-text {
+    flex: 1;
+    font-size: 16px;
+    color: var(--ink);
+  }
+  .faq-arrow {
+    font-size: 12px;
+    color: var(--muted);
+    transition: transform 0.25s ease;
+  }
+  .faq-item[open] .faq-arrow {
+    transform: rotate(90deg);
+  }
+  .faq-answer {
+    padding: 0 20px 20px 20px;
+    display: flex;
+    gap: 12px;
+    border-top: 1px dashed var(--line);
+    margin-top: 4px;
+    padding-top: 16px;
+    background: #fffdfa;
+  }
+  .faq-a-badge {
+    background: #eef7f5;
+    color: var(--group-theme, #0d9488);
+    font-size: 14px;
+    font-weight: 900;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border: 1px solid var(--group-theme, #0d9488);
+  }
+  .faq-a-content {
+    flex: 1;
+    font-size: 15px;
+    line-height: 1.7;
+    color: #35473e;
+  }
+  .faq-a-content p {
+    margin: 0;
+  }
+
+  @media (max-width: 640px) {
+    .faq-hero-box {
+      padding: 16px;
+    }
+    .faq-summary {
+      padding: 14px 14px;
+      gap: 8px;
+    }
+    .faq-q-text {
+      font-size: 15px;
+    }
+    .faq-answer {
+      padding: 14px;
+    }
+  }
+</style>

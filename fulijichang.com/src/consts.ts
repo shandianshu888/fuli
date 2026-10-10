@@ -1,5 +1,6 @@
 export const SITE = {
-  name: '福利机场观察',
+  name: '2026必看！最全福利机场排行榜（真福利/超稳定）',
+  brandName: '福利机场观察',
   description: '面向中文网络服务用户的独立内容博客，提供服务选择、方案对比、知识科普、福利信息与风险观察。',
   url: 'https://fulijichang.com',
   author: '编辑部',

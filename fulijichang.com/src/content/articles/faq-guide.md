@@ -1,8 +1,8 @@
----
+﻿---
 title: "机场选购与使用问题解答：一元机场、免费节点、小火箭配置与防坑 30 问全解析"
 description: "全面解答一元机场、免费机场、赔钱机场、小火箭 (Shadowrocket) 订阅配置、晚高峰卡顿、优惠码与账号安全等 30 篇高频疑难。"
 publishDate: 2026-10-04
-updatedDate: 2026-10-08
+updatedDate: 2026-10-11
 author: "编辑部"
 reviewer: "技术组"
 category: faq

@@ -28,7 +28,7 @@ const path = Astro.url.pathname;
         <span class="nav-label">关于我们</span> 
         <span aria-hidden="true" class="chevron">⌄</span>
       </button>
-      <div class="nav-dropdown-menu" id="about-subnav" hidden>
+      <div class="nav-dropdown-menu" id="about-subnav">
         <a href="/about/" aria-current={path === '/about/' ? 'page' : undefined}>关于我们</a>
         <a href="/friends/" aria-current={path.startsWith('/friends/') ? 'page' : undefined}>友链</a>
       </div>
@@ -51,12 +51,41 @@ const path = Astro.url.pathname;
   document.querySelectorAll('[data-nav-dropdown]').forEach((dropdown)=>{
     const trigger=dropdown.querySelector('.nav-dropdown-trigger');
     const menu=dropdown.querySelector('.nav-dropdown-menu');
-    trigger?.addEventListener('click',()=>{const open=trigger.getAttribute('aria-expanded')!=='true';trigger.setAttribute('aria-expanded',String(open));if(menu) menu.hidden=!open});
-    dropdown.addEventListener('focusout',(event)=>{if(!dropdown.contains(event.relatedTarget)){trigger?.setAttribute('aria-expanded','false');if(menu) menu.hidden=true}});
+    if(menu) menu.removeAttribute('hidden');
+    trigger?.addEventListener('click',(e)=>{
+      e.stopPropagation();
+      const open=dropdown.classList.toggle('is-open');
+      trigger.setAttribute('aria-expanded',String(open));
+    });
+    document.addEventListener('click',(e)=>{
+      if(!dropdown.contains(e.target)){
+        dropdown.classList.remove('is-open');
+        trigger?.setAttribute('aria-expanded','false');
+      }
+    });
+    dropdown.addEventListener('focusout',(event)=>{
+      if(!dropdown.contains(event.relatedTarget)){
+        dropdown.classList.remove('is-open');
+        trigger?.setAttribute('aria-expanded','false');
+      }
+    });
+    dropdown.addEventListener('keydown',(e)=>{
+      if(e.key==='Escape'){
+        dropdown.classList.remove('is-open');
+        trigger?.setAttribute('aria-expanded','false');
+        trigger?.focus();
+      }
+    });
   });
 </script>
 
 <style>
+  :global(.site-header) {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
   /* Header Nav Container */
   .nav {
     display: flex;
@@ -158,6 +187,8 @@ const path = Astro.url.pathname;
   /* Dropdown Styles */
   .nav-dropdown {
     position: relative;
+    display: inline-flex;
+    align-items: center;
   }
   .nav-dropdown-trigger {
     border: 0;
@@ -169,23 +200,37 @@ const path = Astro.url.pathname;
     display: inline-block;
     margin-left: 2px;
     font-size: 11px;
-    transition: transform 0.2s ease;
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   }
-  .nav-dropdown-trigger[aria-expanded="true"] .chevron {
+  .nav-dropdown-trigger[aria-expanded="true"] .chevron,
+  .nav-dropdown.is-open .chevron {
     transform: rotate(180deg);
   }
   .nav-dropdown-menu {
     position: absolute;
-    top: calc(100% + 10px);
+    top: calc(100% + 8px);
     left: 50%;
-    transform: translateX(-50%);
+    transform: translateX(-50%) translateY(-6px);
     min-width: 130px;
     padding: 6px;
     background: var(--surface);
     border: 1px solid var(--line);
     border-radius: 8px;
     box-shadow: 0 10px 24px rgba(21,35,29,0.12);
-    z-index: 30;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.22s cubic-bezier(0.4, 0, 0.2, 1), transform 0.22s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.22s;
+  }
+  /* 悬停防断连桥接热区 */
+  .nav-dropdown-menu::before {
+    content: "";
+    position: absolute;
+    top: -10px;
+    left: 0;
+    right: 0;
+    height: 10px;
   }
   .nav-dropdown-menu a {
     display: block;
@@ -196,6 +241,7 @@ const path = Astro.url.pathname;
     font-size: 13px;
     color: var(--ink);
     font-weight: 500;
+    transition: background 0.15s ease, color 0.15s ease;
   }
   .nav-dropdown-menu a:hover {
     background: var(--theme-bg, #eef3ee);
@@ -204,6 +250,23 @@ const path = Astro.url.pathname;
   .nav-dropdown-menu a[aria-current="page"] {
     background: var(--theme-color, #4f46e5);
     color: #ffffff;
+  }
+
+  /* 桌面端：Hover 悬停或打开或聚焦时平滑下滑展示 */
+  @media (min-width: 851px) {
+    .nav-dropdown:hover .nav-dropdown-menu,
+    .nav-dropdown.is-open .nav-dropdown-menu,
+    .nav-dropdown:focus-within .nav-dropdown-menu {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transform: translateX(-50%) translateY(0);
+    }
+    .nav-dropdown:hover .chevron,
+    .nav-dropdown.is-open .chevron,
+    .nav-dropdown:focus-within .chevron {
+      transform: rotate(180deg);
+    }
   }
 
   /* Responsive Mobile Layout */
@@ -247,6 +310,13 @@ const path = Astro.url.pathname;
       font-size: 15px;
       border-radius: 8px;
     }
+    .nav-dropdown {
+      display: block;
+    }
+    .nav-dropdown-trigger {
+      width: 100%;
+      justify-content: space-between;
+    }
     .nav-dropdown-menu {
       position: static;
       transform: none;
@@ -255,6 +325,17 @@ const path = Astro.url.pathname;
       border-top: 1px solid var(--line);
       margin-top: 6px;
       padding: 6px 0 0 14px;
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      display: none;
+      transition: none;
+    }
+    .nav-dropdown.is-open .nav-dropdown-menu {
+      display: block;
+    }
+    .nav-dropdown.is-open .chevron {
+      transform: rotate(180deg);
     }
     .nav-dropdown-menu a {
       padding: 8px 12px;

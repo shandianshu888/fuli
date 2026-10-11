@@ -7,7 +7,7 @@ import { knowledgeGuides, type KnowledgeGuide } from '../../data/knowledgeGuides
 export function getStaticPaths(){return knowledgeGuides.map(guide=>({params:{slug:guide.slug},props:{guide}}));}
 const {guide}=Astro.props as {guide:KnowledgeGuide};
 const current=knowledgeGuides.findIndex(item=>item.slug===guide.slug);const related=[1,2,3].map(offset=>knowledgeGuides[(current+offset)%knowledgeGuides.length]);
-const canonical=`/knowledge/${guide.slug}/`;const updated='2026-10-08';
+const canonical=`/knowledge/${guide.slug}/`;const updated='2026-10-11';
 const schemas=[{'@context':'https://schema.org','@type':'Article',headline:guide.title,description:guide.description,datePublished:updated,dateModified:updated,author:{'@type':'Person',name:'周言'},editor:{'@type':'Person',name:'林舟'},mainEntityOfPage:new URL(canonical,SITE.url).toString(),publisher:{'@type':'Organization',name:SITE.name,url:SITE.url}},{'@context':'https://schema.org','@type':'BreadcrumbList',itemListElement:[{'@type':'ListItem',position:1,name:'首页',item:SITE.url},{'@type':'ListItem',position:2,name:'知识库',item:new URL('/knowledge/',SITE.url).toString()},{'@type':'ListItem',position:3,name:guide.title,item:new URL(canonical,SITE.url).toString()}]},{'@context':'https://schema.org','@type':'FAQPage',mainEntity:guide.faq.map(item=>({'@type':'Question',name:item.question,acceptedAnswer:{'@type':'Answer',text:item.answer}}))}];
 ---
 <BaseLayout title={guide.title} description={guide.description} canonical={canonical} type="article" schema={schemas}>

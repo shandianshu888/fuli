@@ -1,0 +1,691 @@
+/* ==========================================================================
+   Airport Detail Page Styles - 独立机场测评与深度介绍界面
+   ========================================================================== */
+
+.airport-page {
+  padding-bottom: 72px;
+}
+
+/* Hero Section */
+.airport-hero {
+  background: linear-gradient(180deg, #fff7eb 0%, #fffdf9 100%);
+  border-bottom: 1px solid var(--line);
+  padding: 40px 0 36px;
+  position: relative;
+}
+
+.airport-hero-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 28px;
+  flex-wrap: wrap;
+}
+
+.airport-hero-info {
+  flex: 1 1 520px;
+  min-width: 0;
+}
+
+.airport-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.badge-rank {
+  background: var(--brand);
+  color: #fff;
+  padding: 4px 10px;
+  font: 700 13px/1 system-ui, sans-serif;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+}
+
+.badge-established,
+.badge-operating {
+  background: #fbf3e4;
+  border: 1px solid #e5cc9c;
+  color: #8c5302;
+  padding: 4px 9px;
+  font: 600 12px/1 system-ui, sans-serif;
+  border-radius: 4px;
+}
+
+.airport-title {
+  font-family: Georgia, "Songti SC", "SimSun", serif;
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 0 0 10px;
+  line-height: 1.25;
+}
+
+.airport-tagline {
+  font-size: 17px;
+  color: var(--muted);
+  line-height: 1.6;
+  margin: 0 0 18px;
+}
+
+.airport-features-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.feature-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #fff;
+  border: 1px solid var(--line);
+  padding: 5px 11px;
+  font-size: 13px;
+  color: var(--ink);
+  border-radius: 20px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+}
+
+.feature-pill strong {
+  color: var(--brand);
+}
+
+/* Hero Actions / CTA */
+.airport-hero-cta {
+  flex: 0 0 320px;
+  background: #fff;
+  border: 2px solid #ecd8bd;
+  border-radius: 12px;
+  padding: 22px;
+  box-shadow: 0 8px 24px rgba(78, 52, 24, 0.07);
+}
+
+.cta-header {
+  margin-bottom: 16px;
+  padding-bottom: 14px;
+  border-bottom: 1px dashed var(--line);
+}
+
+.cta-label {
+  font-size: 12px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.cta-coupon-box {
+  margin: 8px 0 0;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.cta-coupon-code {
+  font: 700 22px/1 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  color: var(--brand);
+  letter-spacing: 0.5px;
+}
+
+.cta-coupon-discount {
+  background: #fff0f0;
+  color: var(--brand);
+  border: 1px solid #f8c9c9;
+  padding: 2px 7px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 4px;
+}
+
+.cta-btn-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.btn-visit-primary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--brand);
+  color: #fff;
+  padding: 13px 20px;
+  font-size: 16px;
+  font-weight: 700;
+  text-decoration: none;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(165, 45, 39, 0.25);
+}
+
+.btn-visit-primary:hover {
+  background: var(--brand-dark, #82201b);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(165, 45, 39, 0.35);
+  color: #fff;
+}
+
+.btn-copy-cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #fff8eb;
+  border: 1px solid #d48806;
+  color: #8c5302;
+  padding: 11px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-copy-cta:hover {
+  background: #fff0d2;
+  border-color: #b87502;
+}
+
+.cta-tip {
+  margin: 10px 0 0;
+  font-size: 12px;
+  color: var(--muted);
+  text-align: center;
+}
+
+/* Specs Overview Grid */
+.specs-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin: 32px 0 40px;
+}
+
+.spec-card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 18px 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+  display: flex;
+  flex-direction: column;
+}
+
+.spec-icon-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+
+.spec-value {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.4;
+  margin: 0 0 4px;
+}
+
+.spec-sub {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: auto;
+}
+
+/* Sections */
+.detail-section {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 28px 32px;
+  margin-bottom: 32px;
+  box-shadow: 0 4px 16px rgba(78, 52, 24, 0.03);
+}
+
+.detail-section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2px solid #f6ecdc;
+  padding-bottom: 14px;
+  margin-bottom: 22px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.detail-section-head h2 {
+  font-family: Georgia, "Songti SC", serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.section-tag {
+  font-family: system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  background: #fff0eb;
+  color: var(--brand);
+  border: 1px solid #f5cfc4;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+/* Introduction Body (>= 300 words) */
+.intro-content {
+  font-size: 15px;
+  line-height: 1.95;
+  color: #3b2c28;
+}
+
+.intro-content p {
+  margin: 0 0 16px;
+  text-align: justify;
+}
+
+.intro-content p:last-child {
+  margin-bottom: 0;
+}
+
+.intro-highlight-box {
+  margin: 18px 0;
+  padding: 14px 18px;
+  background: #fffdf9;
+  border-left: 4px solid var(--accent);
+  border-radius: 0 8px 8px 0;
+  color: #664d03;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+/* Speed Test Dashboard Cards */
+.speed-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.speed-metric-card {
+  background: #fffdf9;
+  border: 1px solid #ecd8bd;
+  border-radius: 8px;
+  padding: 14px 16px;
+  text-align: center;
+}
+
+.metric-label {
+  font-size: 12px;
+  color: var(--muted);
+  display: block;
+  margin-bottom: 6px;
+}
+
+.metric-value {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--brand);
+  line-height: 1.2;
+}
+
+.metric-value.green {
+  color: #2b8a3e;
+}
+
+.metric-unit {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--muted);
+  margin-left: 2px;
+}
+
+.metric-sub {
+  font-size: 11px;
+  color: var(--muted);
+  display: block;
+  margin-top: 4px;
+}
+
+/* Speed Test Scenario Note */
+.speed-scenario-note {
+  background: #fbf5ea;
+  border: 1px solid #ecd9bc;
+  padding: 10px 14px;
+  border-radius: 6px;
+  font-size: 13px;
+  color: #724e12;
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Speed Test Nodes Table */
+.speed-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.speed-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  text-align: left;
+  min-width: 620px;
+}
+
+.speed-table th,
+.speed-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--line);
+}
+
+.speed-table thead th {
+  background: #f8ead3;
+  color: #4a341e;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.speed-table tbody tr:hover {
+  background: #fffdfa;
+}
+
+.speed-table tbody th {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.node-region-tag {
+  display: inline-block;
+  padding: 2px 5px;
+  font-size: 11px;
+  font-weight: 700;
+  background: #eef2f8;
+  color: #2b4c7e;
+  border-radius: 3px;
+  margin-right: 6px;
+}
+
+.speed-data-num {
+  font-family: ui-monospace, SFMono-Regular, monospace;
+  font-weight: 600;
+}
+
+.speed-loss-zero {
+  color: #2b8a3e;
+  font-weight: 700;
+}
+
+/* Speed Evaluation Text */
+.speed-eval-box {
+  background: #fdfcfa;
+  border: 1px solid #ebd9c0;
+  border-radius: 8px;
+  padding: 16px 20px;
+  font-size: 14px;
+  line-height: 1.8;
+  color: #493b37;
+}
+
+.speed-eval-box strong {
+  color: var(--brand);
+}
+
+/* Pros and Cons */
+.pros-cons-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.pros-box,
+.cons-box {
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.pros-box {
+  background: #f2f9f3;
+  border: 1px solid #c8e6cd;
+}
+
+.cons-box {
+  background: #fffbf2;
+  border: 1px solid #f0dec0;
+}
+
+.pros-box h3 {
+  font-size: 16px;
+  color: #1b6329;
+  margin: 0 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.cons-box h3 {
+  font-size: 16px;
+  color: #8c5302;
+  margin: 0 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pros-box ul,
+.cons-box ul {
+  margin: 0;
+  padding-left: 20px;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.pros-box li {
+  color: #25442a;
+  margin-bottom: 8px;
+}
+
+.cons-box li {
+  color: #5c441c;
+  margin-bottom: 8px;
+}
+
+/* Nav & Pagination between airports */
+.airport-pagination {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin: 36px 0;
+}
+
+.airport-nav-card {
+  display: flex;
+  flex-direction: column;
+  padding: 16px 20px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.airport-nav-card:hover {
+  border-color: var(--brand);
+  background: #fffaf7;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(165, 45, 39, 0.08);
+}
+
+.airport-nav-card.prev {
+  text-align: left;
+}
+
+.airport-nav-card.next {
+  text-align: right;
+}
+
+.airport-nav-card small {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+
+.airport-nav-card strong {
+  font-size: 15px;
+  color: var(--brand);
+}
+
+.back-to-rank-wrap {
+  text-align: center;
+  margin: 28px 0;
+}
+
+.btn-back-rank {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff;
+  border: 1px solid var(--line);
+  color: var(--ink);
+  padding: 10px 22px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.btn-back-rank:hover {
+  border-color: var(--brand);
+  color: var(--brand);
+  background: #fff5e8;
+}
+
+/* Recommendation Page Enhancement (Links inside ServiceRanking) */
+.service-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.service-detail-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #fff8eb;
+  border: 1px solid #d48806;
+  color: #8c5302;
+  padding: 8px 14px;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 4px;
+  transition: all 0.18s ease;
+}
+
+.service-detail-btn:hover {
+  background: #d48806;
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.service-meta-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fbf5ea;
+  border: 1px solid #ebd9c0;
+  padding: 9px 14px;
+  border-radius: 6px;
+  margin: 12px 0 14px;
+  font-size: 13px;
+  color: #6d4b1a;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.service-meta-banner strong {
+  color: var(--brand);
+}
+
+.service-meta-banner a {
+  color: var(--brand);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.service-meta-banner a:hover {
+  text-decoration: underline;
+}
+
+.nav-detail-link {
+  display: inline-block;
+  font-size: 11px;
+  color: var(--muted);
+  text-decoration: none;
+  margin-top: 3px;
+}
+
+.nav-detail-link:hover {
+  color: var(--brand);
+  text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .specs-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .speed-summary-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .airport-hero-head {
+    flex-direction: column;
+  }
+  .airport-hero-cta {
+    width: 100%;
+    flex: auto;
+  }
+}
+
+@media (max-width: 640px) {
+  .airport-title {
+    font-size: 28px;
+  }
+  .specs-grid {
+    grid-template-columns: 1fr;
+  }
+  .speed-summary-grid {
+    grid-template-columns: 1fr;
+  }
+  .pros-cons-grid {
+    grid-template-columns: 1fr;
+  }
+  .airport-pagination {
+    grid-template-columns: 1fr;
+  }
+  .detail-section {
+    padding: 20px 18px;
+  }
+  .service-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+}

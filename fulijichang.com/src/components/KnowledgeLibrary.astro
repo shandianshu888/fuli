@@ -1,8 +1,340 @@
 ---
 import { knowledgeGuides, knowledgeGroups } from '../data/knowledgeGuides';
+
+const groupIcons: Record<string, string> = {
+  '小火箭 Shadowrocket': '🚀',
+  'Clash 系列': '⚡',
+  'Platy 客户端': '💻',
+  '机场与 VPN 基础': '🛡️',
+  '故障与体验排查': '🔧',
+  '风险与合规': '⚖️',
+  '前沿客户端与协议': '🌐',
+  '场景实战与进阶应用': '🎯'
+};
+
+const groupDescriptions: Record<string, string> = {
+  '小火箭 Shadowrocket': 'iOS 主流客户端安装、订阅导入、分流规则与连接排查',
+  'Clash 系列': '规则与内核配置、代理组选型、Tun 网卡接管及 DNS 故障排查',
+  'Platy 客户端': '客户端来源校验、平台版本辨析与安全使用通用规范',
+  '机场与 VPN 基础': '专线网络、传输协议、流量倍率与网络性能度量指标',
+  '故障与体验排查': '晚高峰变慢、DNS 污染、节点测速与连接中断排查',
+  '风险与合规': '服务条款、跑路识别、隐私保护与合规边界自律手册',
+  '前沿客户端与协议': 'Sing-box 内核、软路由旁路由与 Hysteria 2/Reality 协议实战',
+  '场景实战与进阶应用': '双 ISP 住宅 IP 解锁 AI、跨境多店铺隔离、科研终端与 4K 流媒体'
+};
+
+// 为每个分类分配纯英文字符的唯一稳定锚点 ID，彻底避免任何 URL 编码问题
+const groupSlugs: Record<string, string> = {
+  '小火箭 Shadowrocket': 'group-shadowrocket',
+  'Clash 系列': 'group-clash',
+  'Platy 客户端': 'group-platy',
+  '机场与 VPN 基础': 'group-vpn-basics',
+  '故障与体验排查': 'group-troubleshooting',
+  '风险与合规': 'group-compliance',
+  '前沿客户端与协议': 'group-advanced-protocols',
+  '场景实战与进阶应用': 'group-practical-scenarios'
+};
+
+const getGroupSlug = (group: string) => groupSlugs[group] || `group-${group.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
 ---
+
 <section class="knowledge-library" aria-labelledby="knowledge-library-title">
-  <header class="knowledge-library__head"><div class="eyebrow">{knowledgeGuides.length} 篇实用指南</div><h2 id="knowledge-library-title">从客户端使用到机场常见问题</h2><p>按搜索意图组织，每篇聚焦一个具体问题。内容强调合法合规、来源核验、凭据保护和可复核排查。</p></header>
-  <nav class="knowledge-group-nav" aria-label="知识库文章分组">{knowledgeGroups.map(group=><a href={`#group-${group.replace(/\s+/g,'-')}`}>{group}</a>)}</nav>
-  {knowledgeGroups.map(group => <section class="knowledge-group" id={`group-${group.replace(/\s+/g,'-')}`}><div class="knowledge-group__title"><h3>{group}</h3><span>{knowledgeGuides.filter(item=>item.group===group).length} 篇</span></div><div class="knowledge-guide-grid">{knowledgeGuides.filter(item=>item.group===group).map((item,index)=><article><span>{String(index+1).padStart(2,'0')}</span><h4><a href={`/knowledge/${item.slug}/`}>{item.title}</a></h4><p>{item.description}</p><div>{item.keywords.slice(0,3).map(keyword=><small>{keyword}</small>)}</div></article>)}</div></section>)}
+  <!-- 顶部导言区 -->
+  <header class="knowledge-library__head">
+    <div class="eyebrow">{knowledgeGuides.length} 篇实用指南 · 全景索引</div>
+    <h2 id="knowledge-library-title">从客户端使用到机场常见问题</h2>
+    <p>按搜索意图与实际应用场景分类编排，每篇聚焦一个具体网络问题。内容严格遵循合法合规、来源核验、凭据保护与可复核排查标准。</p>
+  </header>
+
+  <!-- 现代左右分栏布局 -->
+  <div class="knowledge-split-layout">
+    <!-- 左侧分栏：粘性分类目录与导航 -->
+    <aside class="knowledge-sidebar" aria-label="知识库分类目录">
+      <div class="knowledge-sidebar__sticky">
+        <div class="knowledge-sidebar__header">
+          <div class="sidebar-badge-row">
+            <span class="sidebar-eyebrow">分类导航</span>
+            <span class="sidebar-count-badge">共 {knowledgeGuides.length} 篇</span>
+          </div>
+          <h3 class="sidebar-title">知识库目录</h3>
+          <p class="sidebar-desc">点击快速平滑直达对应专题模块</p>
+        </div>
+
+        <!-- 快速搜索/过滤输入框 -->
+        <div class="knowledge-sidebar__search">
+          <input 
+            type="text" 
+            id="knowledgeFilterInput" 
+            placeholder="搜索指南标题或关键词..." 
+            aria-label="快速筛选知识库指南"
+          />
+        </div>
+
+        <!-- 分类导航链接项 -->
+        <nav class="knowledge-sidebar__nav" id="knowledgeSidebarNav" aria-label="文章分组导航">
+          {knowledgeGroups.map((group, idx) => {
+            const count = knowledgeGuides.filter(item => item.group === group).length;
+            const targetId = getGroupSlug(group);
+            return (
+              <a 
+                href={`#${targetId}`} 
+                class:list={['sidebar-nav-item', { active: idx === 0 }]}
+                data-group-target={targetId}
+              >
+                <span class="nav-item-icon">{groupIcons[group] || '📌'}</span>
+                <span class="nav-item-name">{group}</span>
+                <span class="nav-item-badge">{count}</span>
+              </a>
+            );
+          })}
+        </nav>
+
+        <!-- 侧栏贴士卡片 -->
+        <div class="knowledge-sidebar__tip">
+          <div class="tip-header">
+            <span class="tip-icon">💡</span>
+            <strong>阅读指引</strong>
+          </div>
+          <p>初次配置建议先熟悉客户端基础与凭据安全；进阶场景可查阅软路由、AI 防封与多协议专栏。</p>
+        </div>
+      </div>
+    </aside>
+
+    <!-- 右侧分栏：内容主体与卡片展示 -->
+    <main class="knowledge-main-content" id="knowledgeMainContent">
+      {knowledgeGroups.map(group => {
+        const guides = knowledgeGuides.filter(item => item.group === group);
+        const targetId = getGroupSlug(group);
+        return (
+          <section class="knowledge-group" id={targetId} data-group-id={targetId}>
+            <div class="knowledge-group__title">
+              <div class="title-meta">
+                <span class="group-icon">{groupIcons[group] || '📌'}</span>
+                <div>
+                  <h3>{group}</h3>
+                  <p class="group-desc">{groupDescriptions[group] || '聚焦核心实操与配置规范'}</p>
+                </div>
+              </div>
+              <span class="group-count">收录 {guides.length} 篇</span>
+            </div>
+
+            <div class="knowledge-guide-grid">
+              {guides.map((item, index) => (
+                <article 
+                  class="knowledge-card" 
+                  data-guide-title={item.title.toLowerCase()}
+                  data-guide-keywords={item.keywords.join(',').toLowerCase()}
+                >
+                  <div class="card-header">
+                    <span class="card-index">{String(index + 1).padStart(2, '0')}</span>
+                    <span class="card-group-pill">{group}</span>
+                  </div>
+                  <h4 class="card-title">
+                    <a href={`/knowledge/${item.slug}/`}>{item.title}</a>
+                  </h4>
+                  <p class="card-summary">{item.description}</p>
+                  <div class="card-tags">
+                    {item.keywords.slice(0, 3).map(keyword => (
+                      <span class="card-tag">{keyword}</span>
+                    ))}
+                  </div>
+                  <div class="card-footer">
+                    <a href={`/knowledge/${item.slug}/`} class="card-link">
+                      阅读完整指南
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                      </svg>
+                    </a>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </section>
+        );
+      })}
+
+      <!-- 搜索空结果提示 -->
+      <div id="knowledgeEmptyState" class="knowledge-empty-state" style="display: none;">
+        <div class="empty-icon">🔍</div>
+        <h4>未找到匹配的指南文章</h4>
+        <p>请尝试更换搜索关键词，或清空输入框查看全部内容。</p>
+        <button type="button" id="clearSearchBtn" class="clear-search-btn">清空搜索条件</button>
+      </div>
+    </main>
+  </div>
 </section>
+
+<script is:inline>
+  (function initKnowledgeAccurateNav() {
+    const filterInput = document.getElementById('knowledgeFilterInput');
+    const emptyState = document.getElementById('knowledgeEmptyState');
+    const clearBtn = document.getElementById('clearSearchBtn');
+    const cards = document.querySelectorAll('.knowledge-card');
+    const groups = document.querySelectorAll('.knowledge-group');
+    const navItems = document.querySelectorAll('.sidebar-nav-item');
+    const navContainer = document.getElementById('knowledgeSidebarNav');
+
+    let isManualScrolling = false;
+    let manualScrollTimer = null;
+    let scrollRafId = null;
+
+    // 辅助：获取吸顶 Header 高度与安全偏移
+    function getScrollOffset() {
+      const siteHeader = document.querySelector('.site-header');
+      const headerH = siteHeader ? siteHeader.getBoundingClientRect().height : 72;
+      return headerH + 24; // 留出 24px 优雅呼吸间距
+    }
+
+    // 辅助：激活指定导航项
+    function setActiveNavItem(targetId) {
+      navItems.forEach((item) => {
+        if (item.getAttribute('data-group-target') === targetId) {
+          item.classList.add('active');
+          // 移动端横向滑动标签自动居中当前项
+          if (navContainer && window.innerWidth <= 960) {
+            const itemLeft = item.offsetLeft - navContainer.offsetLeft;
+            navContainer.scrollTo({
+              left: Math.max(0, itemLeft - 20),
+              behavior: 'smooth'
+            });
+          }
+        } else {
+          item.classList.remove('active');
+        }
+      });
+    }
+
+    // 1. 核心修复：点击精准平滑滚动跳转
+    navItems.forEach((item) => {
+      item.addEventListener('click', (e) => {
+        e.preventDefault();
+        const targetId = item.getAttribute('data-group-target');
+        const targetElement = document.getElementById(targetId);
+
+        if (!targetElement) return;
+
+        // 立即高亮当前菜单项
+        setActiveNavItem(targetId);
+
+        // 阻止滚动监听干扰
+        isManualScrolling = true;
+        if (manualScrollTimer) clearTimeout(manualScrollTimer);
+
+        // 精准计算绝对滚动坐标
+        const offset = getScrollOffset();
+        const elementRect = targetElement.getBoundingClientRect();
+        const absoluteTargetTop = window.pageYOffset + elementRect.top - offset;
+
+        window.scrollTo({
+          top: Math.max(0, absoluteTargetTop),
+          behavior: 'smooth'
+        });
+
+        // 静默更新 URL hash，不触发浏览器原生生硬跳动
+        try {
+          history.pushState(null, '', `#${targetId}`);
+        } catch (err) {}
+
+        // 800ms 后恢复 ScrollSpy 滚动监听
+        manualScrollTimer = setTimeout(() => {
+          isManualScrolling = false;
+        }, 800);
+      });
+    });
+
+    // 2. 优化 ScrollSpy 滚动位置监听（使用 RAF 防抖，避免乱跳）
+    function handleScrollSpy() {
+      if (isManualScrolling) return;
+
+      const offset = getScrollOffset();
+      const triggerY = offset + 100; // 视口上部触发基准线
+
+      let activeGroupId = null;
+
+      groups.forEach((group) => {
+        // 如果当前分组被搜索隐藏了则跳过
+        if (group.style.display === 'none') return;
+        const rect = group.getBoundingClientRect();
+        // 分组顶部越过触发线且底部还在触发线下方
+        if (rect.top <= triggerY && rect.bottom > triggerY - 60) {
+          activeGroupId = group.getAttribute('id');
+        }
+      });
+
+      // 如果处于页面最顶部，默认选中第一个可见分组
+      if (!activeGroupId && window.pageYOffset < 150) {
+        for (let i = 0; i < groups.length; i++) {
+          if (groups[i].style.display !== 'none') {
+            activeGroupId = groups[i].getAttribute('id');
+            break;
+          }
+        }
+      }
+
+      if (activeGroupId) {
+        setActiveNavItem(activeGroupId);
+      }
+    }
+
+    window.addEventListener('scroll', () => {
+      if (scrollRafId) cancelAnimationFrame(scrollRafId);
+      scrollRafId = requestAnimationFrame(handleScrollSpy);
+    }, { passive: true });
+
+    // 3. 初始加载时检查 URL 中的 hash 并精准定位
+    if (window.location.hash) {
+      const initialId = window.location.hash.substring(1);
+      const initialEl = document.getElementById(initialId);
+      if (initialEl) {
+        setActiveNavItem(initialId);
+        setTimeout(() => {
+          const offset = getScrollOffset();
+          const elementRect = initialEl.getBoundingClientRect();
+          const absoluteTargetTop = window.pageYOffset + elementRect.top - offset;
+          window.scrollTo({
+            top: Math.max(0, absoluteTargetTop),
+            behavior: 'smooth'
+          });
+        }, 150);
+      }
+    }
+
+    // 4. 实时搜索过滤逻辑
+    if (filterInput) {
+      filterInput.addEventListener('input', (e) => {
+        const val = e.target.value.trim().toLowerCase();
+        let totalVisible = 0;
+
+        cards.forEach((card) => {
+          const title = card.getAttribute('data-guide-title') || '';
+          const keywords = card.getAttribute('data-guide-keywords') || '';
+          const match = !val || title.includes(val) || keywords.includes(val);
+          card.style.display = match ? '' : 'none';
+          if (match) totalVisible++;
+        });
+
+        // 检查各分组内是否有可见卡片
+        groups.forEach((group) => {
+          const visibleCards = group.querySelectorAll('.knowledge-card:not([style*="display: none"])');
+          group.style.display = visibleCards.length > 0 ? '' : 'none';
+        });
+
+        if (emptyState) {
+          emptyState.style.display = totalVisible === 0 ? 'block' : 'none';
+        }
+
+        // 重新计算滚动高亮
+        handleScrollSpy();
+      });
+
+      if (clearBtn) {
+        clearBtn.addEventListener('click', () => {
+          filterInput.value = '';
+          filterInput.dispatchEvent(new Event('input'));
+          filterInput.focus();
+        });
+      }
+    }
+  })();
+</script>

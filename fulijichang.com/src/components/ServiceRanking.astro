@@ -1,6 +1,7 @@
 ---
 import StructuredData from './StructuredData.astro';
 import { recommendedServices } from '../data/services';
+import { airportDetails } from '../data/airportDetails';
 import { SITE } from '../consts';
 
 const itemList = {
@@ -58,53 +59,83 @@ const editorialSources = [
   <p class="ranking-note"><strong>推广链接说明：</strong>以下链接可能包含推广参数，名单由本站编辑整理，不代表对速度、稳定性、持续运营或售后的保证。购买前请核对价格、服务条款、退款政策与所在地法律法规，建议先短期、小额验证。</p>
   <div class="ranking-layout">
     <ol class="ranking-list">
-      {recommendedServices.map((service, index) => (
-        <li class:list={['ranking-item', { featured: service.featured }]} id={`service-${index + 1}`}>
-          <span class="rank" aria-label={`第 ${index + 1} 名`}>{index + 1}</span>
-          <div class="service-info">
-            <h3>{service.name}<span class="rank-label">{rankingLabels[index]}</span></h3>
-            <p>{service.recommendation || '补充候选服务'}</p>
-          </div>
-          <a class="service-link" href={service.url} target="_blank" rel="sponsored nofollow noopener noreferrer" aria-label={`访问 ${service.name} 的公开注册页面`}>访问注册页 <span aria-hidden="true">↗</span></a>
-          {(service.plans || service.researchNote || service.sources) && (
-            <div class="service-detail">
-              <div class="recommendation-box">
-                <strong>推荐理由</strong>
-                <p>{service.recommendation}</p>
-                <ul>{highlights[service.name]?.map(point => <li>{point}</li>)}</ul>
-              </div>
-              {service.researchNote && <p class="research-note"><strong>公开资料摘要：</strong>{service.researchNote}</p>}
-              {service.coupon && <div class="coupon-row">
-                <div><span>{service.couponLabel || '7 折优惠码'}</span><strong>{service.coupon}</strong></div>
-                <button type="button" class="copy-coupon" data-coupon={service.coupon} aria-label={`复制 ${service.name} 优惠码 ${service.coupon}`}>复制优惠码</button>
-                <span class="copy-status" aria-live="polite"></span>
-                {service.couponLabel && <small>{service.couponLabel}</small>}
-              </div>}
-              {service.plans && <div class="plan-table-wrap" tabindex="0" aria-label={`${service.name} 套餐价格表，可横向滚动`}>
-                <table class="plan-table">
-                  <thead><tr><th scope="col">套餐</th><th scope="col">周期 / 流量</th><th scope="col">公开价格</th><th scope="col">优惠参考</th><th scope="col">适合人群</th></tr></thead>
-                  <tbody>{service.plans.map(plan => <tr><th scope="row">{plan.name}</th><td>{plan.period}<small>{plan.quota}</small></td><td>¥{plan.price.toFixed(2)}</td><td class="discount-price">{service.discountRate ? `¥${(plan.price * service.discountRate).toFixed(2)}` : service.coupon ? `¥${(plan.price * 0.7).toFixed(2)}` : '以结算页为准'}</td><td>{plan.audience}</td></tr>)}</tbody>
-                </table>
-              </div>}
-              <nav class="service-sources" aria-label={`${service.name} 关联博客`}><strong>公开资料来源</strong><ul>{editorialSources.map(source => <li><a href={source.url} target="_blank" rel="noopener noreferrer"><span>{source.label}</span><small>{source.domain}</small><b aria-hidden="true">↗</b></a></li>)}</ul></nav>
+      {recommendedServices.map((service, index) => {
+        const airport = airportDetails.find(a => a.name === service.name) || airportDetails[index];
+        return (
+          <li class:list={['ranking-item', { featured: service.featured }]} id={`service-${index + 1}`}>
+            <span class="rank" aria-label={`第 ${index + 1} 名`}>{index + 1}</span>
+            <div class="service-info">
+              <h3>{service.name}<span class="rank-label">{rankingLabels[index]}</span></h3>
+              <p>{service.recommendation || '补充候选服务'}</p>
             </div>
-          )}
-          {!service.plans && !service.researchNote && <div class="recommendation-box compact"><strong>推荐理由</strong><p>{recommendationFallback[service.name]}</p></div>}
-        </li>
-      ))}
+            <div class="service-actions">
+              <a class="service-detail-btn" href={`/airport/${airport.id}/`}>深度介绍与测速 →</a>
+              <a class="service-link" href={service.url} target="_blank" rel="sponsored nofollow noopener noreferrer" aria-label={`访问 ${service.name} 的公开注册页面`}>访问注册页 <span aria-hidden="true">↗</span></a>
+            </div>
+            {(service.plans || service.researchNote || service.sources) && (
+              <div class="service-detail">
+                <div class="service-meta-banner">
+                  <div>
+                    <strong>【已收录独立评测】</strong>
+                    <span>开业时间：{airport.establishedDate} · 晚高峰与节假日测速</span>
+                  </div>
+                  <a href={`/airport/${airport.id}/`}>进入独立介绍界面（&gt;300字深度报告） →</a>
+                </div>
+                <div class="recommendation-box">
+                  <strong>推荐理由</strong>
+                  <p>{service.recommendation}</p>
+                  <ul>{highlights[service.name]?.map(point => <li>{point}</li>)}</ul>
+                </div>
+                {service.researchNote && <p class="research-note"><strong>公开资料摘要：</strong>{service.researchNote}</p>}
+                {service.coupon && <div class="coupon-row">
+                  <div><span>{service.couponLabel || '7 折优惠码'}</span><strong>{service.coupon}</strong></div>
+                  <button type="button" class="copy-coupon" data-coupon={service.coupon} aria-label={`复制 ${service.name} 优惠码 ${service.coupon}`}>复制优惠码</button>
+                  <span class="copy-status" aria-live="polite"></span>
+                  {service.couponLabel && <small>{service.couponLabel}</small>}
+                </div>}
+                {service.plans && <div class="plan-table-wrap" tabindex="0" aria-label={`${service.name} 套餐价格表，可横向滚动`}>
+                  <table class="plan-table">
+                    <thead><tr><th scope="col">套餐</th><th scope="col">周期 / 流量</th><th scope="col">公开价格</th><th scope="col">优惠参考</th><th scope="col">适合人群</th></tr></thead>
+                    <tbody>{service.plans.map(plan => <tr><th scope="row">{plan.name}</th><td>{plan.period}<small>{plan.quota}</small></td><td>¥{plan.price.toFixed(2)}</td><td class="discount-price">{service.discountRate ? `¥${(plan.price * service.discountRate).toFixed(2)}` : service.coupon ? `¥${(plan.price * 0.7).toFixed(2)}` : '以结算页为准'}</td><td>{plan.audience}</td></tr>)}</tbody>
+                  </table>
+                </div>}
+                <nav class="service-sources" aria-label={`${service.name} 关联博客`}><strong>公开资料来源</strong><ul>{editorialSources.map(source => <li><a href={source.url} target="_blank" rel="noopener noreferrer"><span>{source.label}</span><small>{source.domain}</small><b aria-hidden="true">↗</b></a></li>)}</ul></nav>
+              </div>
+            )}
+            {!service.plans && !service.researchNote && (
+              <div class="service-detail">
+                <div class="service-meta-banner">
+                  <div>
+                    <strong>【已收录独立评测】</strong>
+                    <span>开业时间：{airport.establishedDate} · 晚高峰与节假日测速</span>
+                  </div>
+                  <a href={`/airport/${airport.id}/`}>进入独立介绍界面（&gt;300字深度报告） →</a>
+                </div>
+                <div class="recommendation-box compact"><strong>推荐理由</strong><p>{recommendationFallback[service.name]}</p></div>
+              </div>
+            )}
+          </li>
+        );
+      })}
     </ol>
     <aside class="ranking-nav" aria-labelledby="ranking-nav-title">
       <div class="ranking-nav-head"><span class="eyebrow">快速导航</span><h3 id="ranking-nav-title">推荐列表</h3></div>
       <ol>
-        {recommendedServices.map((service, index) => (
-          <li class:list={{ active: index === 0 }}>
-            <a href={`#service-${index + 1}`} aria-current={index === 0 ? 'true' : undefined}>
-              <span><b>{index + 1}.</b> {service.name}</span>
-              <em>{rankingLabels[index]}</em>
-            </a>
-            {service.coupon && <div class="nav-coupon-row"><span>优惠码</span><button type="button" class="nav-coupon copy-coupon" data-coupon={service.coupon} aria-label={`复制 ${service.name} 优惠码 ${service.coupon}`}>{service.coupon}<small>复制</small></button><span class="copy-status sr-only" aria-live="polite"></span></div>}
-          </li>
-        ))}
+        {recommendedServices.map((service, index) => {
+          const airport = airportDetails.find(a => a.name === service.name) || airportDetails[index];
+          return (
+            <li class:list={{ active: index === 0 }}>
+              <a href={`#service-${index + 1}`} aria-current={index === 0 ? 'true' : undefined}>
+                <span><b>{index + 1}.</b> {service.name}</span>
+                <em>{rankingLabels[index]}</em>
+              </a>
+              <div class="nav-coupon-row">
+                <a class="nav-detail-link" href={`/airport/${airport.id}/`}>📖 独立介绍与测速</a>
+                {service.coupon && <button type="button" class="nav-coupon copy-coupon" data-coupon={service.coupon} aria-label={`复制 ${service.name} 优惠码 ${service.coupon}`}>{service.coupon}<small>复制</small></button>}
+              </div>
+            </li>
+          );
+        })}
       </ol>
       <p>当前默认选中：闪电鼠</p>
     </aside>

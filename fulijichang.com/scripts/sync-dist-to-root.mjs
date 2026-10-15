@@ -1,5 +1,5 @@
 import { cp, readFile, readdir, writeFile } from 'node:fs/promises';
-import { readFileSync, writeFileSync } from 'node:fs';
+import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import path from 'node:path';
 
 const projectRoot = process.cwd();
@@ -52,4 +52,16 @@ async function processHtmlFiles(rootDir, skipDirs) {
 await processHtmlFiles(projectRoot, ['dist', 'node_modules', 'src', 'public', 'scripts', '.astro']);
 await processHtmlFiles(repoRoot, ['dist', 'node_modules', 'src', 'public', 'scripts', '.astro', '.git', '.pnpm-store', 'fulijichang.com']);
 
+// 针对历史收录路由 /article.html 的静态兼容文件
+const articleIndexRoot = path.join(repoRoot, 'article', 'index.html');
+if (existsSync(articleIndexRoot)) {
+  const articleHtmlTarget = path.join(repoRoot, 'article.html');
+  const source = readFileSync(articleIndexRoot, 'utf8');
+  const portable = source.replace(/\b(href|src)="(\.\.\/[^"]*)"/g, (_match, attr, url) => {
+    return `${attr}="${url.replace(/^\.\.\//, './')}"`;
+  });
+  writeFileSync(articleHtmlTarget, portable, 'utf8');
+}
+
 console.log('Published dist to project root and repo root with portable relative links.');
+

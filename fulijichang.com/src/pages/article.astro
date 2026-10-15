@@ -1,0 +1,209 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { newest } from '../utils/articles';
+import { knowledgeGuides } from '../data/knowledgeGuides';
+import { airportDetails } from '../data/airportDetails';
+
+const articles = newest(await getCollection('articles'));
+
+// 编译一份轻量索引映射表供客户端原地解析
+const articleCatalog = [
+  ...articles.map(a => ({
+    id: a.id,
+    type: 'article',
+    title: a.data.title,
+    description: a.data.description,
+    canonicalPath: `/articles/${a.id}/`
+  })),
+  ...knowledgeGuides.map(k => ({
+    id: k.slug,
+    type: 'knowledge',
+    title: k.title,
+    description: k.description,
+    canonicalPath: `/knowledge/${k.slug}/`
+  })),
+  ...airportDetails.map(d => ({
+    id: d.id,
+    type: 'airport',
+    title: `${d.name} · 独立测评报告`,
+    description: d.tagline,
+    canonicalPath: `/airport/${d.id}/`
+  }))
+];
+---
+
+<BaseLayout 
+  title="文章与内容索引 · 兼容模式" 
+  description="面向历史兼容访问与参数检索的文章中枢。可原地读取 post 参数并渲染正文内容。" 
+  canonical="/article/"
+  noindex={true}
+>
+  <Breadcrumbs items={[{ name: '文章与内容索引' }]} />
+
+  <!-- 动态加载状态或正文容器 -->
+  <div id="dynamicArticleWrapper" class="container" style="padding-top: 24px; padding-bottom: 48px;">
+    <!-- 加载中提示 -->
+    <div id="loadingState" style="display: none; padding: 40px; text-align: center; color: var(--muted);">
+      <div style="font-size: 24px; margin-bottom: 12px;">⏳</div>
+      <p style="margin: 0; font-size: 15px;">正在原地读取并加载正文资源，请稍候...</p>
+    </div>
+
+    <!-- 原地正文渲染区 -->
+    <section id="renderTarget" style="display: none;"></section>
+
+    <!-- 默认索引目录视图（当未传 post 参数或参数无效时展示） -->
+    <section id="catalogView">
+      <header class="page-head" style="padding-top: 10px; padding-bottom: 24px; border-bottom: 1px solid var(--line);">
+        <div class="eyebrow">全站内容库索引</div>
+        <h1 style="font-size: 32px; margin: 8px 0;">文章与技术指南目录</h1>
+        <p style="color: var(--muted); margin: 0;">收录全站 {articleCatalog.length} 篇深度测评、知识库问答与机场专栏，支持根据 URL 参数或关键词原地查找。</p>
+      </header>
+
+      <div style="margin: 24px 0;">
+        <input 
+          type="search" 
+          id="catalogSearchInput" 
+          placeholder="按标题或唯一 ID 快速筛选文章..." 
+          style="width: 100%; max-width: 520px; padding: 10px 14px; border: 1px solid var(--line); border-radius: 4px; font-size: 14px;"
+        />
+      </div>
+
+      <div class="article-grid" id="catalogList" style="margin-top: 20px;">
+        {articleCatalog.map(item => (
+          <article class="article-card catalog-item" data-id={item.id.toLowerCase()} data-title={item.title.toLowerCase()}>
+            <div class="meta" style="margin-bottom: 6px;">
+              <span style="display: inline-block; padding: 2px 7px; background: #faeed9; color: #922c25; font-size: 11px; border-radius: 3px; font-weight: 700;">
+                {item.type === 'article' ? '深度长文' : item.type === 'knowledge' ? '知识库指南' : '机场测评'}
+              </span>
+              <span style="margin-left: 8px; color: var(--muted); font-size: 12px; font-family: monospace;">ID: {item.id}</span>
+            </div>
+            <h3 style="font-size: 18px; margin: 6px 0 10px;">
+              <a href={item.canonicalPath} style="text-decoration: none; color: var(--ink);">{item.title}</a>
+            </h3>
+            <p style="color: var(--muted); font-size: 13.5px; line-height: 1.55; margin: 0 0 12px;">{item.description}</p>
+            <div style="margin-top: auto; padding-top: 10px; border-top: 1px dashed var(--line);">
+              <a href={item.canonicalPath} style="color: var(--brand); font-weight: 700; font-size: 13px; text-decoration: none;">阅读全文 →</a>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+  </div>
+</BaseLayout>
+
+<script is:inline define:vars={{ articleCatalog }}>
+  (function initArticleCompatibilityRenderer() {
+    const params = new URLSearchParams(window.location.search);
+    let postParam = params.get('post') || params.get('id');
+
+    const loadingState = document.getElementById('loadingState');
+    const renderTarget = document.getElementById('renderTarget');
+    const catalogView = document.getElementById('catalogView');
+
+    if (!postParam) {
+      // 未传递参数时，展示全站目录
+      initCatalogSearch();
+      return;
+    }
+
+    // 格式化与容错：去除 .html / .md 后缀、转换为小写中划线
+    postParam = postParam.trim().replace(/\.(html|md)$/i, '').toLowerCase().replace(/_/g, '-');
+
+    // 在预编译映射表中精确查找
+    const matchedItem = articleCatalog.find(item => item.id.toLowerCase() === postParam);
+
+    if (!matchedItem) {
+      // 参数未匹配到文章，提示并显示目录
+      if (catalogView) {
+        const errorBanner = document.createElement('div');
+        errorBanner.style.cssText = 'padding: 14px 18px; background: #fff4e5; border-left: 4px solid #d48227; margin-bottom: 24px; font-size: 14px; color: #6d4215;';
+        errorBanner.innerHTML = `<strong>提示：</strong>未找到 ID 为 <code>${postParam}</code> 的正文，已为您列出全部可选内容：`;
+        catalogView.insertBefore(errorBanner, catalogView.firstChild);
+      }
+      initCatalogSearch();
+      return;
+    }
+
+    // 匹配成功：计算正确的相对路径进行资源请求
+    // 判断当前页面层级：/article.html 为根目录（1级），/article/ 为子目录（2级）
+    const isRootLevel = window.location.pathname.endsWith('.html') && !window.location.pathname.includes('/article/');
+    let fetchUrl = matchedItem.canonicalPath;
+    if (fetchUrl.startsWith('/')) {
+      fetchUrl = (isRootLevel ? '.' : '..') + fetchUrl + 'index.html';
+    }
+
+    // 显示加载中
+    if (loadingState) loadingState.style.display = 'block';
+    if (catalogView) catalogView.style.display = 'none';
+
+    // 原地请求正文静态资源并就地渲染，绝不触发 window.location 循环跳转
+    fetch(fetchUrl)
+      .then(res => {
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return res.text();
+      })
+      .then(htmlText => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(htmlText, 'text/html');
+        const mainContent = doc.querySelector('#main-content') || doc.querySelector('main') || doc.body;
+
+        if (loadingState) loadingState.style.display = 'none';
+        if (renderTarget) {
+          // 增加原地加载成功友好提示条
+          const infoBanner = document.createElement('div');
+          infoBanner.style.cssText = 'padding: 12px 18px; background: #f0f7f3; border: 1px solid #c2e2cf; border-radius: 4px; margin-bottom: 20px; font-size: 13.5px; color: #1e5a3c; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;';
+          
+          const textSpan = document.createElement('span');
+          textSpan.innerHTML = `✓ 已根据参数 <code>${postParam}</code> 原地加载正文内容`;
+          
+          const fullLink = document.createElement('a');
+          fullLink.href = matchedItem.canonicalPath;
+          fullLink.textContent = '在新页面中以完整模式阅读 ↗';
+          fullLink.style.cssText = 'color: #176b49; font-weight: 700; text-decoration: underline;';
+          
+          infoBanner.appendChild(textSpan);
+          infoBanner.appendChild(fullLink);
+
+          renderTarget.innerHTML = '';
+          renderTarget.appendChild(infoBanner);
+          renderTarget.appendChild(mainContent);
+          renderTarget.style.display = 'block';
+        }
+
+        // 同步更新页面标题
+        if (doc.title) {
+          document.title = doc.title;
+        }
+      })
+      .catch(err => {
+        console.warn('原地加载正文失败，降级展示目录:', err);
+        if (loadingState) loadingState.style.display = 'none';
+        if (catalogView) {
+          catalogView.style.display = 'block';
+          const errorBanner = document.createElement('div');
+          errorBanner.style.cssText = 'padding: 14px 18px; background: #fff0f0; border-left: 4px solid #b54035; margin-bottom: 20px; font-size: 14px; color: #851e18;';
+          errorBanner.innerHTML = `<strong>加载失败：</strong>正文静态文件请求异常（${err.message}），请从下方直接点击阅读：`;
+          catalogView.insertBefore(errorBanner, catalogView.firstChild);
+        }
+        initCatalogSearch();
+      });
+
+    function initCatalogSearch() {
+      const searchInput = document.getElementById('catalogSearchInput');
+      const items = document.querySelectorAll('.catalog-item');
+      if (!searchInput) return;
+
+      searchInput.addEventListener('input', (e) => {
+        const val = e.target.value.trim().toLowerCase();
+        items.forEach(el => {
+          const id = el.getAttribute('data-id') || '';
+          const title = el.getAttribute('data-title') || '';
+          const match = !val || id.includes(val) || title.includes(val);
+          el.style.display = match ? '' : 'none';
+        });
+      });
+    }
+  })();
+</script>
